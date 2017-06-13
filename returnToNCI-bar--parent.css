@@ -1,0 +1,34 @@
+html {
+	overflow-x: visible !important;
+}
+body {
+/*
+	transform: translateY(24px);
+	transition: transform .5s;
+	*/
+	overflow: visible;
+	overflow-x: visible;
+	display: inline-block !important;
+	position: relative;
+	width: 100%;
+	max-width: 100%;
+	margin: 0 !important;
+}
+
+body.returnToNCI-frame--active {
+	/*transform: translateY(71px);*/
+}
+
+#returnToNCI-frame {
+	display:block !important;
+	border:0;
+	margin:0;
+	width:100%;
+	max-width: 100%;
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:calc(100% - 20px);
+	z-index: 10000;
+	overflow: hidden;
+}
