@@ -52,7 +52,7 @@
 ;(function( ){
 	var NCI_topBar = (function(){
 	
-		var iframe = create('iframe',{id:'returnToNCI-frame',height:0,scrolling:'no'});
+		var iframe = create('iframe',{id:'returnToNCI-frame',height:0,scrolling:'no',style:'position:absolute;'});
 		var sidr = document.getElementById('sidr-0-button') || document.getElementById('sidr-main');
 		//var header = sidr.closest("header") || document.getElementById("wrap");
 		//TODO: also get 'header' elements that sometime appear first
