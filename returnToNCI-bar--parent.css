@@ -32,3 +32,6 @@ body.returnToNCI-frame--active {
 	z-index: 10000;
 	overflow: hidden;
 }
+@media print {
+	#returnToNCI-frame {display:none; !important}
+}
