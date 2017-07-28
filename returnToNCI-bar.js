@@ -189,7 +189,7 @@
 
         function fetchCSS(){
             //check if returnToNCI-bar--parent.css has been included, if not then download it
-            if(document.querySelectorAll('link[href*="returnToNCI-bar"')[0]){
+            if(document.querySelectorAll('link[href*="returnToNCI-bar"]')[0]){
                 init();
             } else {
                 // production path
