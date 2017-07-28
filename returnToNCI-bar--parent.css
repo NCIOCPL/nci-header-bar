@@ -2,10 +2,6 @@ html {
 	overflow-x: visible !important;
 }
 body {
-/*
-	transform: translateY(24px);
-	transition: transform .5s;
-	*/
 	overflow: visible;
 	overflow-x: visible;
 	display: inline-block !important;
@@ -14,10 +10,6 @@ body {
 	max-width: 100%;
 	margin: 0 !important;
 	transform:translateY(24px);
-}
-
-body.returnToNCI-frame--active {
-	/*transform: translateY(71px);*/
 }
 
 #returnToNCI-frame {
