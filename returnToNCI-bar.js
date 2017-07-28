@@ -52,7 +52,7 @@
 ;(function( ){
     var NCI_topBar = (function(){
 
-        var iframe = create('iframe',{id:'returnToNCI-frame',height:0,scrolling:'no',style:'position:absolute;'});
+        var iframe = create('iframe',{id:'returnToNCI-frame',height:0,width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
         var sidr = document.getElementById('sidr-0-button') || document.getElementById('sidr-main');
         //var header = sidr.closest("header") || document.getElementById("wrap");
         //TODO: also get 'header' elements that sometime appear first
@@ -188,11 +188,25 @@
         }
 
         function fetchCSS(){
-            var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css'});
-            topBarStyles.onload = init();
+            //check if returnToNCI-bar--parent.css has been included, if not then download it
+            if(document.querySelectorAll('link[href*="returnToNCI-bar"')[0]){
+                init();
+            } else {
+                // production path
+                //var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css'});
 
-            // inject style sheet
-            document.getElementsByTagName('head')[0].appendChild(topBarStyles);
+                // testing load failure
+                // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css'});
+
+                //dev path
+                var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--parent.css',onload:init()});
+
+                // inject style sheet
+                document.getElementsByTagName('head')[0].appendChild(topBarStyles);
+
+            }
+
+
         }
 
         // initialize the NCI Top Bar iFrame
@@ -218,24 +232,7 @@
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
 
-
-            // inject iframe
-            document.body.insertBefore(iframe,document.body.firstChild);
-
-            // set shortcut variable
-            iframeDoc = iframe.contentWindow.document;
-
-            //inject top bar markup
-            iframeDoc.open();
-            iframeDoc.write(content);
-            iframeDoc.close();
-
-            // set shortcut variable
-            drawer = iframeDoc.getElementById("returnToNCI-drawer");
-            header = sidr?document.body.querySelector('div:not(.skip-link):not(#skip-link),header'):null;
-
-            //iframe.onload = setTimeout(function() {resizeIframe(0)}, 500);
-
+            // check that css has been loaded before resizing iFrame
             var isCssLoaded = function(){
                 if(window.getComputedStyle(iframeDoc.getElementById('returnToNCI-nav')).display!='block'){
                     setTimeout(isCssLoaded,100);
@@ -244,29 +241,58 @@
                 }
             };
 
-            iframe.onload = isCssLoaded;
+            // render the iframe
+            var renderIframe = function(){
+
+                document.body.insertBefore(iframe,document.body.firstChild);
+
+                // set shortcut variable
+                iframeDoc = iframe.contentWindow.document;
+
+                //inject top bar markup
+                iframeDoc.open();
+                iframeDoc.write(content);
+                iframeDoc.close();
+
+                // set shortcut variable
+                drawer = iframeDoc.getElementById("returnToNCI-drawer");
+                header = sidr?document.body.querySelector('div:not(.skip-link):not(#skip-link),header'):null;
+
+                iframe.onload = isCssLoaded();
 
 
-            // hook up click events
-            var drawerLinks = iframeDoc.querySelectorAll('#returnToNCI-drawer, #returnToNCI-drawer .chevron');
-            for(var i = 0; i < drawerLinks.length; i++) {
-                drawerLinks[i].addEventListener('click', toggleMenu);
-            }
+                // hook up click events
+                var drawerLinks = iframeDoc.querySelectorAll('#returnToNCI-drawer, #returnToNCI-drawer .chevron');
+                for(var i = 0; i < drawerLinks.length; i++) {
+                    drawerLinks[i].addEventListener('click', toggleMenu);
+                }
 
-            // throttle resize event with a custom event listener
-            throttle("resize", "optimizedResize");
+                // throttle resize event with a custom event listener
+                throttle("resize", "optimizedResize");
 
-            // add resize event to window
-            window.addEventListener("optimizedResize", resizeIframe);
+                // add resize event to window
+                window.addEventListener("optimizedResize", resizeIframe);
 
-            // fix center aligned pages
-            if (window.getComputedStyle(iframe.nextElementSibling).float == 'left' || window.getComputedStyle(iframe.nextElementSibling).cssFloat == 'left'){
-                iframe.nextElementSibling.style.float = 'none';
-                iframe.nextElementSibling.style.display = 'inline-block';
-            }
+                // fix center aligned pages
+                if (window.getComputedStyle(iframe.nextElementSibling).float == 'left' || window.getComputedStyle(iframe.nextElementSibling).cssFloat == 'left'){
+                    iframe.nextElementSibling.style.float = 'none';
+                    iframe.nextElementSibling.style.display = 'inline-block';
+                }
 
-            // add domain to links for analytics
-            appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
+                // add domain to links for analytics
+                appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
+            };
+
+            // inject iframe - doing this on a timeout so that it will be loaded as soon as possible
+            var injectIframe = function(){
+                if(document.contains(document.body)){
+                    renderIframe();
+                } else {
+                    setTimeout(injectIframe,50);
+                }
+            };
+
+            injectIframe();
 
             //TODO: max-width and center aligned pages visualsonline.cancer.gov
         }

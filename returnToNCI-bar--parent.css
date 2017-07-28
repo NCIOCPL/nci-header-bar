@@ -13,6 +13,7 @@ body {
 	width: 100%;
 	max-width: 100%;
 	margin: 0 !important;
+	transform:translateY(24px);
 }
 
 body.returnToNCI-frame--active {
@@ -20,7 +21,7 @@ body.returnToNCI-frame--active {
 }
 
 #returnToNCI-frame {
-	display:block !important;
+	/*display:block !important;*/
 	border:0;
 	margin:0;
 	width:100%;
@@ -31,6 +32,7 @@ body.returnToNCI-frame--active {
 	bottom:calc(100% - 20px);
 	z-index: 10000;
 	overflow: hidden;
+	visibility: visible !important;
 }
 @media print {
 	#returnToNCI-frame {display:none; !important}
