@@ -193,16 +193,17 @@
                 init();
             } else {
                 // production path
-                var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css'});
+                var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css',onload:init()});
 
                 // testing load failure
-                // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css'});
+                // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css',onload:init()});
 
                 //dev path
                 // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--parent.css',onload:init()});
 
                 // inject style sheet
                 document.getElementsByTagName('head')[0].appendChild(topBarStyles);
+
 
             }
 
