@@ -1,17 +1,20 @@
 body {
-	margin:0;
-	overflow: hidden;
-	font-family: Arial;
+    margin:0;
+    overflow: hidden;
+    font-family: Arial;
 }
 
 #returnToNCI-nav {
-	display: block !important;
-    position: relative;
+    display: block !important;
+    position: absolute;
     z-index: 9999;
     text-align: center;
     font-size:10px;
     line-height: 14px;
     font-family: 'Noto Sans',ArialMT, Arial;
+    bottom:20px;
+    left:0;
+    right:0;
 }
 #returnToNCI-nav a {
     color: #fff;
@@ -19,16 +22,16 @@ body {
     text-decoration: none;
 }
 #returnToNCI-nav a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 #returnToNCI-menu {
     background: #084468;
-	overflow: hidden;
+    overflow: hidden;
     transition: max-height 0.5s ease-in-out;
 
 }
 #returnToNCI-menu ul {
-	max-width: 1200px;
+    max-width: 1200px;
     display: flex;
     justify-content: space-around;
     list-style: none;
@@ -78,20 +81,20 @@ body {
     transform: rotate(-45deg) translateY(3px) translateX(-3px);
 }
 @media (max-width: 700px) {
-	#returnToNCI-drawer .chevron {
-		transform: translateX(-50%) translateY(12px);
-		width: 35px;
-	}
-	#returnToNCI-drawer .chevron::before {
-		bottom: -23px;
-	}
+    #returnToNCI-drawer .chevron {
+        transform: translateX(-50%) translateY(12px);
+        width: 35px;
+    }
+    #returnToNCI-drawer .chevron::before {
+        bottom: -23px;
+    }
 }
 @media (max-width: 460px) {
-	#returnToNCI-menu ul {
-		flex-wrap: wrap;
-	}
-	#returnToNCI-menu li {
-		flex-basis: 40%;
-		padding: 3px 10px;
-	}
+    #returnToNCI-menu ul {
+        flex-wrap: wrap;
+    }
+    #returnToNCI-menu li {
+        flex-basis: 40%;
+        padding: 3px 10px;
+    }
 }

@@ -15,6 +15,20 @@
     window.CustomEvent = CustomEvent;
 })();  // END: CustomEvent
 
+// document.contains polyfill for stupid IE
+document.contains = Element.prototype.contains = function contains(node) {
+    if (!(0 in arguments)) {
+        throw new TypeError('1 argument is required');
+    }
+    do {
+        if (this === node) {
+            return true;
+        }
+    } while (node = node && node.parentNode);
+
+    return false;
+};
+
 // Closest selector polyfill for IE
 ;(function (ElementProto) {
     if (typeof ElementProto.matches !== 'function') {
@@ -52,13 +66,11 @@
 ;(function( ){
     var NCI_topBar = (function(){
 
-        var iframe = create('iframe',{id:'returnToNCI-frame',height:0,width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
+        var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
         var sidr = document.getElementById('sidr-0-button') || document.getElementById('sidr-main');
         //var header = sidr.closest("header") || document.getElementById("wrap");
         //TODO: also get 'header' elements that sometime appear first
-        var header;
-        var iframeDoc;
-        var drawer;
+        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav;
 
         // create new DOM nodes
         function create(name, props) {
@@ -83,24 +95,19 @@
             obj.addEventListener(type, func);
         }
 
-        // get the height of the drawer
-        function getDrawerHeight(){
-            return drawer.offsetHeight +'px'
-        }
-
         //use a css transition to slide the body down and show the menu
         function slideBody(delay) {
 
             delay = typeof delay == 'undefined'? .5 : delay;
-            document.body.style.transition = 'transform ' + delay + 's';
+            bodyStyle.transition = 'transform ' + delay + 's';
 
-            if(document.body.className.match(/returnToNCI-frame--active/)) {
-                document.body.style.transform = 'translateY('+ drawer.offsetHeight +'px)';
-                document.body.className = document.body.className.replace(" returnToNCI-frame--active","");
+            if(bodyClass.match(/returnToNCI-frame--active/)) {
+                bodyStyle.transform = 'translateY('+ drawer.offsetHeight +'px)';
+                bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
             } else {
-                var shift = parseInt(iframe.style.height) - 20 + 'px';
-                document.body.className += " returnToNCI-frame--active";
-                document.body.style.transform = 'translateY('+ shift + ')';
+                var shift = parseInt(nav.offsetHeight) + 'px';
+                bodyClass += " returnToNCI-frame--active";
+                bodyStyle.transform = 'translateY('+ shift + ')';
             }
         }
 
@@ -112,18 +119,18 @@
             delay = typeof delay == 'undefined'? .5 : delay;
             iframe.style.transition = 'transform ' + delay + 's';
 
-            if(document.body.className.match(/returnToNCI-frame--active/)) {
+            if(bodyClass.match(/returnToNCI-frame--active/)) {
                 header.style.marginTop = drawer.offsetHeight + 10 + 'px';
 // 				iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
-                document.body.className = document.body.className.replace(" returnToNCI-frame--active","");
+                bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
 
             } else {
-                offset = parseInt(iframe.style.height) - 20 + 'px';
-                header.style.marginTop = parseInt(iframe.style.height) - 10 + 'px';
+                offset = parseInt(nav.offsetHeight) + 'px';
+                header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
 // 				iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
-                document.body.className += " returnToNCI-frame--active";
+                bodyClass += " returnToNCI-frame--active";
             }
         }
 
@@ -132,10 +139,10 @@
             delay = typeof delay == 'undefined'? .5 : delay;
             // getting height based on first child for consistency between browsers
             // body.offsetHeight in FF != body.offsetHeight in Chrome
-            iframe.style.height = iframeDoc.body.firstChild.offsetHeight + 20 + 'px'; // +20 is to make room for the chevron
+            // iframe.style.height = iframeDoc.body.firstChild.offsetHeight + 20 + 'px'; // +20 is to make room for the chevron
 
             //remove active styles - needed on resize event
-            document.body.className = document.body.className.replace(" returnToNCI-frame--active","");
+            bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
             drawer.className = "";
 
             // if there is a sidr menu then target the header element, otherwise use body
@@ -151,8 +158,8 @@
                 iframe.style.transform = 'translateY(' + offset + ')';
 
             } else {
-                document.body.style.transition = 'transform ' + delay + 's';
-                document.body.style.transform = 'translateY('+ drawer.offsetHeight +'px)';
+                bodyStyle.transition = 'transform ' + delay + 's';
+                bodyStyle.transform = 'translateY('+ drawer.offsetHeight +'px)';
 
             }
         }
@@ -193,13 +200,13 @@
                 init();
             } else {
                 // production path
-                var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css',onload:init()});
+                //var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css',onload:init()});
 
                 // testing load failure
                 // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css',onload:init()});
 
                 //dev path
-                // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--parent.css',onload:init()});
+                var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--parent.css',onload:init()});
 
                 // inject style sheet
                 document.getElementsByTagName('head')[0].appendChild(topBarStyles);
@@ -214,7 +221,7 @@
         function init() {
             var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
             //'<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
-            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
+            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--child.css" /></head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_">Cancer Types</a></li>' +
@@ -233,15 +240,6 @@
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
 
-            // check that css has been loaded before resizing iFrame
-            var isCssLoaded = function(){
-                if(window.getComputedStyle(iframeDoc.getElementById('returnToNCI-nav')).display!='block'){
-                    setTimeout(isCssLoaded,100);
-                } else {
-                    resizeIframe(0);
-                }
-            };
-
             // render the iframe
             var renderIframe = function(){
 
@@ -257,9 +255,8 @@
 
                 // set shortcut variable
                 drawer = iframeDoc.getElementById("returnToNCI-drawer");
+                nav = iframeDoc.getElementById("returnToNCI-nav");
                 header = sidr?document.body.querySelector('div:not(.skip-link):not(#skip-link),header'):null;
-
-                iframe.onload = isCssLoaded();
 
 
                 // hook up click events
@@ -275,9 +272,10 @@
                 window.addEventListener("optimizedResize", resizeIframe);
 
                 // fix center aligned pages
-                if (window.getComputedStyle(iframe.nextElementSibling).float == 'left' || window.getComputedStyle(iframe.nextElementSibling).cssFloat == 'left'){
-                    iframe.nextElementSibling.style.float = 'none';
-                    iframe.nextElementSibling.style.display = 'inline-block';
+                var nextEl = iframe.nextElementSibling;
+                if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
+                    nextEl.style.float = 'none';
+                    nextEl.style.display = 'inline-block';
                 }
 
                 // add domain to links for analytics
@@ -287,6 +285,10 @@
             // inject iframe - doing this on a timeout so that it will be loaded as soon as possible
             var injectIframe = function(){
                 if(document.contains(document.body)){
+                    // assign variable shortcuts
+                    bodyStyle = document.body.style;
+                    bodyClass = document.body.className;
+
                     renderIframe();
                 } else {
                     setTimeout(injectIframe,50);
