@@ -17,6 +17,19 @@ module.exports = function (grunt, options) {
                 dest: dirs.dist.base,
                 filter: 'isFile'
             }]
+        },
+        scripts: {
+            nonull: true,
+            files: [{
+                expand: true,
+                flatten: true,
+                src: [
+                    dirs.tmp.base + '**/*.js',
+                    dirs.tmp.base + '**/*.js.map'
+                ],
+                dest: dirs.dist.base,
+                filter: 'isFile'
+            }]            
         }
     }
 };

@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
 
     var target = grunt.option('target') || 'dist';
+    var proxyhost = grunt.option('proxyhost') || 'www.cancer.gov';
 
     var config = {
         dirs: {
@@ -44,7 +45,16 @@ module.exports = function(grunt) {
     });
 
 
-    
+    grunt.registerTask('build-js', 'Packages the JS files', function(env) {
+        env = (env === 'prod' ? 'prod' : 'dev');
+        grunt.config('env', env);
+        
+        var tasks = [
+            'uglify:' + env,
+            'copy:scripts',
+            'clean:tmp'];
+        grunt.task.run(tasks);                
+    });
 
     // ----------------------------------------------------------------
     grunt.registerTask('build', 'Build all files.', function (env) {
@@ -52,27 +62,16 @@ module.exports = function(grunt) {
         grunt.config('env', env);
 
         var tasks = [
-//            'generate-config:' + env,
-//            'build-styles:' + env,
-//            'uglify:' + env,
-//            'copy:scripts',
-//            'clean:tmp',
-//            'build-templates:' + env,
-//            'build-xsl',
-//            'build-images',
-//            'build-files',
-//            'copy-fonts',
-//            'webpack:' + env
+            'build-styles:' + env,
+            'build-js:' + env,
+            'clean:tmp',
         ];
 
         grunt.task.run(tasks);
-    });
+    });    
 
-    grunt.registerTask('build-watch', 'Proxy header', function(host) {
+    grunt.registerTask('build-watch', 'Proxy header', function(env) {
         var useHttps = true;
-
-        //Assume env is dev.  Should make sure built files work too...
-        var env = dev;
 
         config.env = env;
 
@@ -80,8 +79,8 @@ module.exports = function(grunt) {
         grunt.config.merge({
             develop: {
                 server: {
-                    dev: {
-                        PROXY_ENV: host,
+                    env: {
+                        PROXY_ENV: proxyhost,
                         PROXY_HTTPS: useHttps
                     }
                 }
