@@ -1,3 +1,5 @@
+//Global elements for returnToNCI bar for inclusion in nci-global.css
+
 html {
 	overflow-x: visible !important;
 }
@@ -13,7 +15,7 @@ body {
 }
 
 #returnToNCI-frame {
-	/*display:block !important;*/
+	/* display:block !important; */
 	border:0;
 	margin:0;
 	width:100%;
@@ -28,5 +30,5 @@ body {
 	visibility: visible !important;
 }
 @media print {
-	#returnToNCI-frame {display:none; !important}
+	#returnToNCI-frame {display:none !important;}
 }
