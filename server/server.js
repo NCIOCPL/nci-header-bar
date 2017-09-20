@@ -53,9 +53,22 @@ var scheme = '';
 if(useHttps)
     scheme = 'https://';
 
+/**
+ * Function to inject the Return to NCI code into the head and body?
+ * 
+ * @param {any} body 
+ * @returns 
+ */
 function injectReturnToNCI(body) {
-    return body;
+    //TODO: Dr. Frank N. Furter -- you will need to figure out what you need here.  Will it load at top of head, will the script be async
+    //can it be at the end of the body, etc.  The placement will matter.
+    let modified = body;
+    modified = body.replace(/(<\/head>)/i, '<link rel="stylesheet" href="/nci-global.css" /><script src="/returnToNCI-bar.js"></script>');
+    return modified;
 }
+
+//Try to fetch content locally
+app.use(express.static(__dirname.replace("server","dist")));
 
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
@@ -67,12 +80,17 @@ app.use(
         onProxyRes: function(proxyRes, req, res) {
 
             //https://github.com/chimurai/http-proxy-middleware/issues/97
-            if (proxyRes.headers && contentTypeRegEx.test(proxyRes.headers['content-type'])) {
-
+            if (
+                proxyRes.headers && 
+                proxyRes.headers['content-type'] &&
+                proxyRes.headers['content-type'].match('text/html')
+            ){
                 winston.info('Rewriting Proxy Response -- tis HTML');
 
                 const end = res.end;
                 const writeHead = res.writeHead;
+                const write = res.write;
+
                 let writeHeadArgs;
                 let body; 
                 let buffer = new Buffer('');
@@ -83,6 +101,7 @@ app.use(
                     buffer = Buffer.concat([buffer, chunk]);
                   })
                   .on('end', () => {
+                    //Should probably account for deflate...
                     if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
                         body = zlib.gunzipSync(buffer).toString('utf8');
                     } else {
@@ -102,7 +121,9 @@ app.use(
                   res.removeHeader('content-encoding');
                   writeHead.apply(res, writeHeadArgs);
             
-                  end.apply(res, [output]);
+                  write.apply( res, [output] );
+
+                  end.apply(res, [""]);
                 };
             }            
         }
