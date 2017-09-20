@@ -1,19 +1,24 @@
 #!/usr/bin/env node
-var debug = require('debug')('expressapp');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var exphbs  = require('express-handlebars');
-var proxy = require('http-proxy-middleware');
-var querystring = require('querystring');
+const debug = require('debug')('expressapp');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const winston = require('winston');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const exphbs  = require('express-handlebars');
+const proxy = require('http-proxy-middleware');
+const querystring = require('querystring');
+
+const zlib = require('zlib');
 
 var app = express();
 
 //This should be something like www.cancer.gov, dctd.cancer.gov, etc.
 var proxyEnv = process.env.PROXY_ENV;
 var useHttps = process.env.PROXY_HTTPS === 'true';
+
+const contentTypeRegEx = /.*text\/html.*/i;
 
 //We will use handlebars to deal with certain types of templating
 //mainly error pages.  THIS SHOULD NOT BE USED FOR WEBSITE CONTENT!!!
@@ -48,15 +53,62 @@ var scheme = '';
 if(useHttps)
     scheme = 'https://';
 
+function injectReturnToNCI(body) {
+    return body;
+}
+
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
     '*', //Match any paths
     //Setup the proxy to replace 
     proxy({
         target: scheme + proxyEnv,
-        changeOrigin: true
+        changeOrigin: true,
+        onProxyRes: function(proxyRes, req, res) {
+
+            //https://github.com/chimurai/http-proxy-middleware/issues/97
+            if (proxyRes.headers && contentTypeRegEx.test(proxyRes.headers['content-type'])) {
+
+                winston.info('Rewriting Proxy Response -- tis HTML');
+
+                const end = res.end;
+                const writeHead = res.writeHead;
+                let writeHeadArgs;
+                let body; 
+                let buffer = new Buffer('');
+            
+                // Concat and unzip proxy response
+                proxyRes
+                  .on('data', (chunk) => {
+                    buffer = Buffer.concat([buffer, chunk]);
+                  })
+                  .on('end', () => {
+                    if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
+                        body = zlib.gunzipSync(buffer).toString('utf8');
+                    } else {
+                        body = buffer.toString('utf8');
+                    }                   
+                  });
+            
+                // Defer write and writeHead
+                res.write = () => {};
+                res.writeHead = (...args) => { writeHeadArgs = args; };
+            
+                // Update user response at the end
+                res.end = () => {
+                  const output = injectReturnToNCI(body); // some function to manipulate body
+                  
+                  res.setHeader('content-length', output.length);
+                  res.removeHeader('content-encoding');
+                  writeHead.apply(res, writeHeadArgs);
+            
+                  end.apply(res, [output]);
+                };
+            }            
+        }
     })
 );
+
 
 /************************************************************
  * Error Handlers
