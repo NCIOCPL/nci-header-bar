@@ -8,3 +8,7 @@ Directory Contents
 * * The mode JS files will be concatenated together and not module based for performance reasons.  So they should be built accordingly.
 * * FUTURE: If needed, you can add a <sitename>.js file that has the customized modules for <sitename>
 
+NOTE: It may be better in the future that we actually deploy the sass partials to the web server, then
+use static.cancer.gov/nci-global/nci-global.css?features=A,B,C where _A.scss, _B.scss and _C.scss are the partials.
+
+For now, we can use sitename.scss in order to have the site specific css and it will call in the correct partials.

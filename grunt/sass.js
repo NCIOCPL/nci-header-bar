@@ -30,9 +30,13 @@ module.exports = function (grunt, options) {
         },        
         files: [
           {
-            dest: dirs.tmp.base + '/nci-global.css',
-            src: dirs.src.base + '/nci-global.scss'
+            dest: dirs.tmp.base + '/nci-global-default.css',
+            src: dirs.src.base + '/nci-global-default.scss'
           },
+          {
+            dest: dirs.tmp.base + '/nci-global-siteName.css',
+            src: dirs.src.base + '/nci-global-siteName.scss'
+          },          
           {
             dest: dirs.tmp.modules + 'returnToNCI/returnToNCI-bar.css',
             src: dirs.src.modules + 'returnToNCI/returnToNCI-bar.scss'

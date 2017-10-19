@@ -1,0 +1,6 @@
+{
+    "cssMapping": {
+        "default": "nci-global-default",
+        "siteName": "nci-global-siteName"
+    }
+}

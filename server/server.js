@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
 const proxy = require('http-proxy-middleware');
 const querystring = require('querystring');
+const globalConfig = require('../global-config.json');
 
 const zlib = require('zlib');
 
@@ -17,8 +18,10 @@ var app = express();
 //This should be something like www.cancer.gov, dctd.cancer.gov, etc.
 var proxyEnv = process.env.PROXY_ENV;
 var useHttps = process.env.PROXY_HTTPS === 'true';
+var cssSiteName = process.env.CSS_SITENAME;
 
 const contentTypeRegEx = /.*text\/html.*/i;
+const globCSSPathRegEx = /^\/nci-global\.css(\?.*$|$)/i;
 
 //We will use handlebars to deal with certain types of templating
 //mainly error pages.  THIS SHOULD NOT BE USED FOR WEBSITE CONTENT!!!
@@ -63,9 +66,32 @@ function injectReturnToNCI(body) {
     //TODO: Dr. Frank N. Furter -- you will need to figure out what you need here.  Will it load at top of head, will the script be async
     //can it be at the end of the body, etc.  The placement will matter.
     let modified = body;
-    modified = body.replace(/(<\/head>)/i, '<link rel="stylesheet" href="/nci-global.css" /><script src="/returnToNCI-bar.js"></script>');
+    modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${cssSiteName}" /><script src="/returnToNCI-bar.js"></script>`);
     return modified;
 }
+
+app.use((req, res, next) => {
+
+    if (globCSSPathRegEx.test(req.url)) {
+
+        let sitename = 'default';
+
+        if (req.query['sitename']) {
+            sitename = req.query['sitename']
+        }
+        
+        var css_file = (globalConfig.cssMapping[sitename]) ? globalConfig.cssMapping[sitename] : globalConfig.cssMapping["default"];
+
+        winston.info(`Selecting ${sitename} CSS`);
+
+        //Figure out CSS to use
+        winston.info(`using ${css_file}`);
+
+        req.url = `/${css_file}.css`;
+    }
+
+    next();
+});
 
 //Try to fetch content locally
 app.use(express.static(__dirname.replace("server","dist")));

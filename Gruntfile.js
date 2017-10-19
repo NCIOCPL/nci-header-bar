@@ -3,6 +3,7 @@ module.exports = function(grunt) {
 
     var target = grunt.option('target') || 'dist';
     var proxyhost = grunt.option('proxyhost') || 'www.cancer.gov';
+    var cssSitename = grunt.option('css-sitename') || 'global';
 
     var config = {
         dirs: {
@@ -81,7 +82,8 @@ module.exports = function(grunt) {
                 server: {
                     env: {
                         PROXY_ENV: proxyhost,
-                        PROXY_HTTPS: useHttps
+                        PROXY_HTTPS: useHttps,
+                        CSS_SITENAME: cssSitename
                     }
                 }
             }
