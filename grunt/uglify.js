@@ -6,7 +6,7 @@ module.exports = function (grunt, options) {
     var files = {
         expand: true,
         flatten: true,
-        dest: dirs.tmp.base + '**/*.js',
+        dest: dirs.tmp.base,
         src: [dirs.src.base + '**/*.js']
     };
     return {
