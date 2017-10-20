@@ -9,7 +9,8 @@ const bodyParser = require('body-parser');
 const exphbs  = require('express-handlebars');
 const proxy = require('http-proxy-middleware');
 const querystring = require('querystring');
-const globalConfig = require('../global-config.json');
+const url = require('url');
+const fs = require('fs');
 
 const zlib = require('zlib');
 
@@ -18,10 +19,8 @@ var app = express();
 //This should be something like www.cancer.gov, dctd.cancer.gov, etc.
 var proxyEnv = process.env.PROXY_ENV;
 var useHttps = process.env.PROXY_HTTPS === 'true';
-var cssSiteName = process.env.CSS_SITENAME;
 
 const contentTypeRegEx = /.*text\/html.*/i;
-const globCSSPathRegEx = /^\/nci-global\.css(\?.*$|$)/i;
 
 //We will use handlebars to deal with certain types of templating
 //mainly error pages.  THIS SHOULD NOT BE USED FOR WEBSITE CONTENT!!!
@@ -66,35 +65,60 @@ function injectReturnToNCI(body) {
     //TODO: Dr. Frank N. Furter -- you will need to figure out what you need here.  Will it load at top of head, will the script be async
     //can it be at the end of the body, etc.  The placement will matter.
     let modified = body;
-    modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${cssSiteName}" /><script src="/returnToNCI-bar.js"></script>`);
+    modified = body.replace(/(<\/head>)/i, '<link rel="stylesheet" href="/nci-global.css?site='+proxyEnv+'" /><script src="/returnToNCI-bar.js?site='+proxyEnv+'"></script>\n</head>');
     return modified;
 }
 
-app.use((req, res, next) => {
-
-    if (globCSSPathRegEx.test(req.url)) {
-
-        let sitename = 'default';
-
-        if (req.query['sitename']) {
-            sitename = req.query['sitename']
+function pickFile(path,file){
+    var reqPath = "";
+    try {
+        var site = querystring.parse(url.parse(path).query).site;
+        if (fs.existsSync('./dist/returnToNCI/' + site + file)) {
+            console.log("using site specific file for:", file);
+            reqPath = "/" + site;
+        } else {
+            console.log("using default file for:",file)
         }
-        
-        var css_file = (globalConfig.cssMapping[sitename]) ? globalConfig.cssMapping[sitename] : globalConfig.cssMapping["default"];
-
-        winston.info(`Selecting ${sitename} CSS`);
-
-        //Figure out CSS to use
-        winston.info(`using ${css_file}`);
-
-        req.url = `/${css_file}.css`;
+    } catch (err) {
+        console.log(err);
     }
 
-    next();
-});
+    return path.replace(file, reqPath + file);
+}
+
+app.use('/nci-global.css',proxy({
+        target: scheme + proxyEnv,
+        changeOrigin: true,
+        // onProxyRes: function (proxyRes, req, res) {
+        //     console.log("nci-global.css request");
+        // },
+        // pathRewrite: {
+        //     '/nci-global.css' : '/nci-global--visualsonline.css'
+        // },
+        pathRewrite: function (path, req) {
+            return pickFile(path,'/nci-global.css')
+        },
+        router: {
+            'localhost:3000' : 'http://localhost:3000/returnToNCI'
+        }
+    })
+);
+
+app.use('/returnToNCI-bar.js',proxy({
+        target: scheme + proxyEnv,
+        changeOrigin: true,
+        pathRewrite: function (path, req) {
+            return pickFile(path,'/returnToNCI-bar.js')
+        },
+        router: {
+            'localhost:3000' : 'http://localhost:3000/returnToNCI'
+        }
+    })
+);
 
 //Try to fetch content locally
 app.use(express.static(__dirname.replace("server","dist")));
+app.use(express.static(__dirname.replace("server","dist/returnToNCI")));
 
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
@@ -120,7 +144,7 @@ app.use(
                 let writeHeadArgs;
                 let body; 
                 let buffer = new Buffer('');
-            
+
                 // Concat and unzip proxy response
                 proxyRes
                   .on('data', (chunk) => {
@@ -142,7 +166,6 @@ app.use(
                 // Update user response at the end
                 res.end = () => {
                   const output = injectReturnToNCI(body); // some function to manipulate body
-                  
                   res.setHeader('content-length', output.length);
                   res.removeHeader('content-encoding');
                   writeHead.apply(res, writeHeadArgs);
@@ -151,7 +174,7 @@ app.use(
 
                   end.apply(res, [""]);
                 };
-            }            
+            }
         }
     })
 );

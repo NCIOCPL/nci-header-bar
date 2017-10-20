@@ -17,9 +17,9 @@ module.exports = function (grunt, options) {
     );
   
     return {
-      options: {
-        includePaths: Modules
-      },
+      // options: {
+      //   includePaths: Modules
+      // },
       dev: {
         options: {
           sourceMap: true,
@@ -27,21 +27,14 @@ module.exports = function (grunt, options) {
           //    return Modules.concat(['_src/StyleSheets/environments/dev']);
           //  })()
         
-        },        
-        files: [
-          {
-            dest: dirs.tmp.base + '/nci-global-default.css',
-            src: dirs.src.base + '/nci-global-default.scss'
-          },
-          {
-            dest: dirs.tmp.base + '/nci-global-siteName.css',
-            src: dirs.src.base + '/nci-global-siteName.scss'
-          },          
-          {
-            dest: dirs.tmp.modules + 'returnToNCI/returnToNCI-bar.css',
-            src: dirs.src.modules + 'returnToNCI/returnToNCI-bar.scss'
-          }
-        ]
+        },
+        files: [{
+            expand: true,
+            cwd: dirs.src.modules,
+            src: ["**/*.scss"],
+            dest: dirs.dist.base,
+            ext: ".css"
+        }]
       },
       prod: {
         options: {

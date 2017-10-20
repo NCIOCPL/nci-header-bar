@@ -1,9 +1,14 @@
 module.exports = function(grunt) {
 
+    // TODO: add webpack for custom bundles and require/define methods
+    // TODO: break apart SASS into smaller pieces
+    // TODO: develop JS in a more functional programming style for composing custom bundles
+    // TODO: add linter...because
 
-    var target = grunt.option('target') || 'dist';
+
+
+    // var target = grunt.option('target') || 'dist';
     var proxyhost = grunt.option('proxyhost') || 'www.cancer.gov';
-    var cssSitename = grunt.option('css-sitename') || 'global';
 
     var config = {
         dirs: {
@@ -16,8 +21,8 @@ module.exports = function(grunt) {
                 modules: "_tmp/modules/"
             },
             dist: {
-                base: target + "/",
-                modules: target + "/modules/",
+                base: 'dist' + "/",
+                modules: 'dist' + "/modules/",
             },
             bower: 'bower_components/'
         },
@@ -39,9 +44,7 @@ module.exports = function(grunt) {
         env = (env === 'prod' ? 'prod' : 'dev');
         grunt.config('env', env);
 
-        var tasks = ['sass:' + env,
-            'copy:styles',
-            'clean:tmp'];
+        var tasks = ['sass:' + env];
         grunt.task.run(tasks);
     });
 
@@ -50,10 +53,7 @@ module.exports = function(grunt) {
         env = (env === 'prod' ? 'prod' : 'dev');
         grunt.config('env', env);
         
-        var tasks = [
-            'uglify:' + env,
-            'copy:scripts',
-            'clean:tmp'];
+        var tasks = ['uglify:' + env];
         grunt.task.run(tasks);                
     });
 
@@ -64,8 +64,7 @@ module.exports = function(grunt) {
 
         var tasks = [
             'build-styles:' + env,
-            'build-js:' + env,
-            'clean:tmp',
+            'build-js:' + env
         ];
 
         grunt.task.run(tasks);
@@ -82,8 +81,7 @@ module.exports = function(grunt) {
                 server: {
                     env: {
                         PROXY_ENV: proxyhost,
-                        PROXY_HTTPS: useHttps,
-                        CSS_SITENAME: cssSitename
+                        PROXY_HTTPS: useHttps
                     }
                 }
             }
@@ -96,7 +94,7 @@ module.exports = function(grunt) {
         ];
 
         grunt.task.run(tasks);
-    })
+    });
 
     // We should ALWAYS define the 'default' task
     grunt.registerTask('default', ['build']);
