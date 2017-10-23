@@ -1,7 +1,12 @@
 {
-    "cssMapping": {
-        "default": "nci-global-default",
-        "siteName": "nci-global--siteName",
-        "visualsonline.cancer.gov": "nci-global--visualsonline"
+    "proxyMapping": {
+        "default": {
+            "url": "www.cancer.gov",
+            "globalCSS": "nci-global",
+        },
+        "vol": {
+            "url": "visualsonline.cancer.gov",
+            "globalCSS": "nci-global--visualsonline"
+        }
     }
 }

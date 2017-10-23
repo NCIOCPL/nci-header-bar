@@ -56,6 +56,8 @@ var scheme = '';
 if(useHttps)
     scheme = 'https://';
 
+let siteConfig = (globalConfig.proxyMapping[proxyEnv]) ? globalConfig.proxyMapping[proxyEnv] : globalConfig.proxyMapping["default"];
+
 /**
  * Function to inject the Return to NCI code into the head and body?
  * 
@@ -73,16 +75,8 @@ function injectReturnToNCI(body) {
 app.use((req, res, next) => {
 
     if (globCSSPathRegEx.test(req.url)) {
-
-        let sitename = 'default';
-
-        if (req.query['sitename']) {
-            sitename = req.query['sitename']
-        }
         
-        var css_file = (globalConfig.cssMapping[sitename]) ? globalConfig.cssMapping[sitename] : globalConfig.cssMapping["default"];
-
-        winston.info(`Selecting ${sitename} CSS`);
+        var css_file = siteConfig.globalCSS;
 
         //Figure out CSS to use
         winston.info(`using ${css_file}`);
@@ -101,7 +95,7 @@ app.use(
     '*', //Match any paths
     //Setup the proxy to replace 
     proxy({
-        target: scheme + proxyEnv,
+        target: scheme + siteConfig.url,
         changeOrigin: true,
         onProxyRes: function(proxyRes, req, res) {
 
