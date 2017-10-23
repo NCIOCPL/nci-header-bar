@@ -2,7 +2,7 @@
     "proxyMapping": {
         "default": {
             "url": "www.cancer.gov",
-            "globalCSS": "nci-global",
+            "globalCSS": "nci-global"
         },
         "vol": {
             "url": "visualsonline.cancer.gov",
