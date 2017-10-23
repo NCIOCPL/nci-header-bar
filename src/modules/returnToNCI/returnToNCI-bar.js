@@ -206,7 +206,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css',onload:init()});
 
                 //dev path
-                var topBarStyles = create('link',{rel:'stylesheet',href:'/returnToNCI-bar.css',onload:init()});
+                var topBarStyles = create('link',{rel:'stylesheet',href:'/modules/returnToNCI/returnToNCI-bar.css',onload:init()});
 
                 // inject style sheet
                 document.getElementsByTagName('head')[0].appendChild(topBarStyles);
@@ -221,7 +221,7 @@ document.contains = Element.prototype.contains = function contains(node) {
         function init() {
             var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
             //'<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
-            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="/returnToNCI-bar.css" /></head>' +
+            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" /></head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_">Cancer Types</a></li>' +

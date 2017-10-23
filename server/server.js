@@ -66,7 +66,7 @@ function injectReturnToNCI(body) {
     //TODO: Dr. Frank N. Furter -- you will need to figure out what you need here.  Will it load at top of head, will the script be async
     //can it be at the end of the body, etc.  The placement will matter.
     let modified = body;
-    modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${cssSiteName}" /><script src="/returnToNCI-bar.js"></script>`);
+    modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script>`);
     return modified;
 }
 
