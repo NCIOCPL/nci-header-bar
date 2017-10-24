@@ -48,12 +48,75 @@
             "url": "evs.nci.nih.gov",
             "globalCSS": "nci-global--childMarginFix"
         },
+        "fundedresearch": {
+            "url": "fundedresearch.cancer.gov",
+            "startPage": "nciportfolio"
+        },
+        "futurefellows": {
+            "url": "futurefellows.cancer.gov"
+        },
+        "gdc": {
+            "url": "gdc.cancer.gov"
+        },
+        "glycomics": {
+            "url": "glycomics.cancer.gov"
+        },
+        "gutcheck": {
+            "url": "gutcheck.cancer.gov"
+        },
+        "imat": {
+            "url": "imat.cancer.gov"
+        },
         "innovation": {
             "url": "innovation.cancer.gov"
         },
+        "itcr": {
+            "url": "itcr.cancer.gov"
+        },
+        "nciadvocates": {
+            "url": "nciadvocates.cancer.gov",
+            "startPage": "oarext/OARHome.action"
+        },
+        "ncifrederick": {
+            "url": "ncifrederick.cancer.gov"
+        },
+        "nci": {
+            "url": "ncl.cancer.gov"
+        },
+        "next": {
+            "url": "next.cancer.gov"
+        },
         "nfrp": {
             "url": "nfrp.nci.nih.gov",
-            "startPage": "nfrp.nci.nih.gov/nciportfolio"
+            "startPage": "nciportfolio"
+        },
+        "ocg": {
+            "url": "ocg.cancer.gov"
+        },
+        "prevention": {
+            "url": "prevention.cancer.gov"
+        },
+        "proteomics": {
+            "url": "proteomics.cancer.gov"
+        },
+        "pq": {
+            "url": "provocativequestions.nci.nih.gov"
+        },
+        "pubs": {
+            "url": "pubs.cancer.gov",
+            "startPage": "ncipl/home.aspx"
+        },
+        "sbir": {
+            "url": "sbir.cancer.gov"
+        },
+        "seer": {
+            "url": "seer.cancer.gov"
+        },
+        "supportorgs": {
+            "url": "supportorgs.cancer.gov"
+        },
+        "techtransfer": {
+            "url": "techtransfer.cancer.gov"
         },
         "thesaurus": {
             "url": "thesaurus.cancer.gov",
