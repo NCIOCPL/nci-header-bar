@@ -56,13 +56,14 @@ var scheme = '';
 if(useHttps)
     scheme = 'https://';
 
-let siteConfig = (globalConfig.proxyMapping[proxyEnv]) ? globalConfig.proxyMapping[proxyEnv] : globalConfig.proxyMapping["default"];
+let defaultConfig = globalConfig.proxyMapping["default"];
+let siteConfig = (globalConfig.proxyMapping[proxyEnv]) ? globalConfig.proxyMapping[proxyEnv] : defaultConfig;
 
 /**
  * Function to inject the Return to NCI code into the head and body?
- * 
- * @param {any} body 
- * @returns 
+ *
+ * @param {any} body
+ * @returns
  */
 function injectReturnToNCI(body) {
     //TODO: Dr. Frank N. Furter -- you will need to figure out what you need here.  Will it load at top of head, will the script be async
@@ -75,8 +76,8 @@ function injectReturnToNCI(body) {
 app.use((req, res, next) => {
 
     if (globCSSPathRegEx.test(req.url)) {
-        
-        var css_file = siteConfig.globalCSS;
+
+        var css_file = siteConfig.globalCSS ? siteConfig.globalCSS : defaultConfig.globalCSS;
 
         //Figure out CSS to use
         winston.info(`using ${css_file}`);
@@ -90,10 +91,30 @@ app.use((req, res, next) => {
 //Try to fetch content locally
 app.use(express.static(__dirname.replace("server","dist")));
 
+
+// app.get("/",proxy({
+//     target: scheme + siteConfig.url,
+//     changeOrigin: true,
+//     onProxyRes: function(proxyRes, req, res) {
+//         if(proxyRes.statusCode == 302) {
+//             console.log("Got a redirect in GET");
+//             //return res.redirect("/" + siteConfig.startPage);
+//             //res.writeHead(302, {location: siteConfig.startPage});
+//             // res.end();
+//
+//             // req.method = 'get';
+//             //res.redirect("/" + siteConfig.startPage);
+//         }
+//     },
+//     function(req,res) {
+//         console.log("Somethings going on here")
+//     }
+// }));
+
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
     '*', //Match any paths
-    //Setup the proxy to replace 
+    //Setup the proxy to replace
     proxy({
         target: scheme + siteConfig.url,
         changeOrigin: true,
@@ -101,10 +122,10 @@ app.use(
 
             //https://github.com/chimurai/http-proxy-middleware/issues/97
             if (
-                proxyRes.headers && 
+                proxyRes.headers &&
                 proxyRes.headers['content-type'] &&
                 proxyRes.headers['content-type'].match('text/html')
-            ){
+            ) {
                 winston.info('Rewriting Proxy Response -- tis HTML');
 
                 const end = res.end;
@@ -112,40 +133,43 @@ app.use(
                 const write = res.write;
 
                 let writeHeadArgs;
-                let body; 
+                let body;
                 let buffer = new Buffer('');
-            
+
                 // Concat and unzip proxy response
                 proxyRes
-                  .on('data', (chunk) => {
-                    buffer = Buffer.concat([buffer, chunk]);
-                  })
-                  .on('end', () => {
-                    //Should probably account for deflate...
-                    if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
-                        body = zlib.gunzipSync(buffer).toString('utf8');
-                    } else {
-                        body = buffer.toString('utf8');
-                    }                   
-                  });
-            
+                    .on('data', (chunk) => {
+                        buffer = Buffer.concat([buffer, chunk]);
+                    })
+                    .on('end', () => {
+                        //Should probably account for deflate...
+                        if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
+                            body = zlib.gunzipSync(buffer).toString('utf8');
+                        } else {
+                            body = buffer.toString('utf8');
+                        }
+                    });
+
                 // Defer write and writeHead
-                res.write = () => {};
-                res.writeHead = (...args) => { writeHeadArgs = args; };
-            
+                res.write = () => {
+                };
+                res.writeHead = (...args) => {
+                    writeHeadArgs = args;
+                };
+
                 // Update user response at the end
                 res.end = () => {
-                  const output = injectReturnToNCI(body); // some function to manipulate body
-                  
-                  res.setHeader('content-length', output.length);
-                  res.removeHeader('content-encoding');
-                  writeHead.apply(res, writeHeadArgs);
-            
-                  write.apply( res, [output] );
+                    const output = injectReturnToNCI(body); // some function to manipulate body
 
-                  end.apply(res, [""]);
+                    res.setHeader('content-length', output.length);
+                    res.removeHeader('content-encoding');
+                    writeHead.apply(res, writeHeadArgs);
+
+                    write.apply(res, [output]);
+
+                    end.apply(res, [""]);
                 };
-            }            
+            }
         }
     })
 );

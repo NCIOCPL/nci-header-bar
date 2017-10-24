@@ -4,6 +4,61 @@
             "url": "www.cancer.gov",
             "globalCSS": "nci-global"
         },
+        "assays": {
+            "url": "assays.cancer.gov"
+        },
+        "cancercenters": {
+            "url": "cancercenters.cancer.gov"
+        },
+        "cancercontrol": {
+            "url": "cancercontrol.cancer.gov"
+        },
+        "cbiit": {
+            "url": "cbiit.nci.nih.gov"
+        },
+        "ccr": {
+            "url": "ccr.cancer.gov"
+        },
+        "cpfp": {
+            "url": "cpfp.cancer.gov"
+        },
+        "cssi": {
+            "url": "cssi.cancer.gov"
+        },
+        "dctd": {
+            "url": "dctd.cancer.gov"
+        },
+        "deainfo": {
+            "url": "deainfo.nci.nih.gov"
+        },
+        "deais": {
+            "url": "deais.nci.nih.gov"
+        },
+        "dtc": {
+            "url": "dtc.cancer.gov"
+        },
+        "ebms": {
+            "url": "ebms.nci.nih.gov",
+            "startPage": "login"
+        },
+        "edrn": {
+            "url": "edrn.nci.nih.gov"
+        },
+        "evs": {
+            "url": "evs.nci.nih.gov",
+            "globalCSS": "nci-global--childMarginFix"
+        },
+        "innovation": {
+            "url": "innovation.cancer.gov"
+        },
+        "nfrp": {
+            "url": "nfrp.nci.nih.gov",
+            "startPage": "nfrp.nci.nih.gov/nciportfolio"
+        },
+        "thesaurus": {
+            "url": "thesaurus.cancer.gov",
+            "startPage": "ncitbrowser"
+        },
         "vol": {
             "url": "visualsonline.cancer.gov",
             "globalCSS": "nci-global--visualsonline"
