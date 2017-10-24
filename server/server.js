@@ -22,6 +22,7 @@ var cssSiteName = process.env.CSS_SITENAME;
 
 const contentTypeRegEx = /.*text\/html.*/i;
 const globCSSPathRegEx = /^\/nci-global\.css(\?.*$|$)/i;
+const returnToNCIPathRegEx = /\/returnToNCI-bar\.js(\?.*$|$)/i;
 
 //We will use handlebars to deal with certain types of templating
 //mainly error pages.  THIS SHOULD NOT BE USED FOR WEBSITE CONTENT!!!
@@ -85,8 +86,19 @@ app.use((req, res, next) => {
         req.url = `/${css_file}.css`;
     }
 
+    if (returnToNCIPathRegEx.test(req.url)) {
+
+        var js_file = siteConfig.modules ? siteConfig.modules.returnToNCI : defaultConfig.modules.returnToNCI;
+
+        //Figure out CSS to use
+        winston.info(`using ${js_file}`);
+
+        req.url = `/modules/returnToNCI/${js_file}.js`;
+    }
+
     next();
 });
+
 
 //Try to fetch content locally
 app.use(express.static(__dirname.replace("server","dist")));

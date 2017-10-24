@@ -2,10 +2,17 @@
     "proxyMapping": {
         "default": {
             "url": "www.cancer.gov",
-            "globalCSS": "nci-global"
+            "globalCSS": "nci-global",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar"
+            }
         },
         "assays": {
-            "url": "assays.cancer.gov"
+            "url": "assays.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
+
         },
         "cancercenters": {
             "url": "cancercenters.cancer.gov"
@@ -14,7 +21,10 @@
             "url": "cancercontrol.cancer.gov"
         },
         "cbiit": {
-            "url": "cbiit.nci.nih.gov"
+            "url": "cbiit.nci.nih.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "ccr": {
             "url": "ccr.cancer.gov"
@@ -23,7 +33,10 @@
             "url": "cpfp.cancer.gov"
         },
         "cssi": {
-            "url": "cssi.cancer.gov"
+            "url": "cssi.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "dctd": {
             "url": "dctd.cancer.gov"
@@ -46,7 +59,10 @@
         },
         "evs": {
             "url": "evs.nci.nih.gov",
-            "globalCSS": "nci-global--childMarginFix"
+            "globalCSS": "nci-global--childMarginFix",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "fundedresearch": {
             "url": "fundedresearch.cancer.gov",
@@ -65,13 +81,19 @@
             "url": "gutcheck.cancer.gov"
         },
         "imat": {
-            "url": "imat.cancer.gov"
+            "url": "imat.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "innovation": {
             "url": "innovation.cancer.gov"
         },
         "itcr": {
-            "url": "itcr.cancer.gov"
+            "url": "itcr.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "nciadvocates": {
             "url": "nciadvocates.cancer.gov",
@@ -81,7 +103,10 @@
             "url": "ncifrederick.cancer.gov"
         },
         "nci": {
-            "url": "ncl.cancer.gov"
+            "url": "ncl.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "next": {
             "url": "next.cancer.gov"
@@ -97,7 +122,10 @@
             "url": "prevention.cancer.gov"
         },
         "proteomics": {
-            "url": "proteomics.cancer.gov"
+            "url": "proteomics.cancer.gov",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "pq": {
             "url": "provocativequestions.nci.nih.gov"
