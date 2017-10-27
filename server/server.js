@@ -104,24 +104,18 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname.replace("server","dist")));
 
 
-// app.get("/",proxy({
-//     target: scheme + siteConfig.url,
-//     changeOrigin: true,
-//     onProxyRes: function(proxyRes, req, res) {
-//         if(proxyRes.statusCode == 302) {
-//             console.log("Got a redirect in GET");
-//             //return res.redirect("/" + siteConfig.startPage);
-//             //res.writeHead(302, {location: siteConfig.startPage});
-//             // res.end();
-//
-//             // req.method = 'get';
-//             //res.redirect("/" + siteConfig.startPage);
-//         }
-//     },
-//     function(req,res) {
-//         console.log("Somethings going on here")
-//     }
-// }));
+app.get("/",proxy({
+    target: scheme + siteConfig.url,
+    changeOrigin: true,
+    onProxyRes: function(proxyRes, req, res) {
+        if(proxyRes.statusCode == 302) {
+            console.log("Got a redirect in GET");
+            //TODO: check protocol for internal redirect
+            //TODO: response for external redirects
+            proxyRes.headers['location'] = "/" + siteConfig.startPage;
+        }
+    }
+}));
 
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
