@@ -9,6 +9,7 @@
         },
         "assays": {
             "url": "assays.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
@@ -21,19 +22,22 @@
             "url": "cancercontrol.cancer.gov"
         },
         "cbiit": {
-            "url": "cbiit.nci.nih.gov",
+            "url": "cbiit.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
         },
         "ccr": {
-            "url": "ccr.cancer.gov"
+            "url": "ccr.cancer.gov",
+            "globalCSS": "nci-global--ccr"
         },
         "cpfp": {
             "url": "cpfp.cancer.gov"
         },
         "cssi": {
             "url": "cssi.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
@@ -42,7 +46,8 @@
             "url": "dctd.cancer.gov"
         },
         "deainfo": {
-            "url": "deainfo.nci.nih.gov"
+            "url": "deainfo.nci.nih.gov",
+            "globalCSS": "nci-global--deainfo"
         },
         "deais": {
             "url": "deais.nci.nih.gov"
@@ -59,29 +64,34 @@
         },
         "evs": {
             "url": "evs.nci.nih.gov",
-            "globalCSS": "nci-global--childMarginFix",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
         },
         "fundedresearch": {
             "url": "fundedresearch.cancer.gov",
-            "startPage": "nciportfolio"
+            "globalCSS": "nci-global--fundedresearch",
+            "startPage": "nciportfolio/"
         },
         "futurefellows": {
             "url": "futurefellows.cancer.gov"
         },
         "gdc": {
-            "url": "gdc.cancer.gov"
+            "url": "gdc.cancer.gov",
+            "globalCSS": "nci-global--gdc"
         },
         "glycomics": {
-            "url": "glycomics.cancer.gov"
+            "url": "glycomics.cancer.gov",
+            "globalCSS": "nci-global--glycomics"
         },
         "gutcheck": {
-            "url": "gutcheck.cancer.gov"
+            "url": "gutcheck.cancer.gov",
+            "globalCSS": "nci-global--gutcheck"
         },
         "imat": {
             "url": "imat.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
@@ -91,6 +101,7 @@
         },
         "itcr": {
             "url": "itcr.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
@@ -100,10 +111,12 @@
             "startPage": "oarext/OARHome.action"
         },
         "ncifrederick": {
-            "url": "ncifrederick.cancer.gov"
+            "url": "ncifrederick.cancer.gov",
+            "startPage": "Default.aspx"
         },
-        "nci": {
+        "ncl": {
             "url": "ncl.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
@@ -113,7 +126,8 @@
         },
         "nfrp": {
             "url": "nfrp.nci.nih.gov",
-            "startPage": "nciportfolio"
+            "globalCSS": "nci-global--fundedresearch",
+            "startPage": "nciportfolio/"
         },
         "ocg": {
             "url": "ocg.cancer.gov"
@@ -123,16 +137,21 @@
         },
         "proteomics": {
             "url": "proteomics.cancer.gov",
+            "globalCSS": "nci-global--sidr",
             "modules": {
                 "returnToNCI": "returnToNCI-bar--sidr"
             }
         },
         "pq": {
-            "url": "provocativequestions.nci.nih.gov"
+            "url": "provocativequestions.nci.nih.gov",
+            "globalCSS": "nci-global--sidr",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "pubs": {
             "url": "pubs.cancer.gov",
-            "startPage": "ncipl/home.aspx"
+            "startPage": "ncipl"
         },
         "sbir": {
             "url": "sbir.cancer.gov"
@@ -141,14 +160,15 @@
             "url": "seer.cancer.gov"
         },
         "supportorgs": {
-            "url": "supportorgs.cancer.gov"
+            "url": "supportorgs.cancer.gov",
+            "startPage": "home.aspx?js=1"
         },
         "techtransfer": {
             "url": "techtransfer.cancer.gov"
         },
         "thesaurus": {
             "url": "thesaurus.cancer.gov",
-            "startPage": "ncitbrowser"
+            "startPage": "ncitbrowser/"
         },
         "vol": {
             "url": "visualsonline.cancer.gov",

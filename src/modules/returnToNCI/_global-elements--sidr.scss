@@ -1,8 +1,8 @@
 //Global elements for returnToNCI bar for inclusion in nci-global.css
-
 body {
-	transform:translateY(24px);
-	overflow: visible;
+	//transform:translateY(24px);
+	display: inline-block;
+	width: 100%;
 }
 
 #returnToNCI-frame {

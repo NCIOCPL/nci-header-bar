@@ -99,21 +99,15 @@ document.contains = Element.prototype.contains = function contains(node) {
         function slideHeader(delay) {
             var offset = drawer.offsetHeight + 'px';
 
-            console.log(header);
-
             delay = typeof delay == 'undefined'? .5 : delay;
             iframe.style.transition = 'transform ' + delay + 's';
 
             if(bodyClass.match(/returnToNCI-frame--active/)) {
-                header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-// 				iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
 
             } else {
                 offset = parseInt(nav.offsetHeight) + 'px';
-                header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
-// 				iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass += " returnToNCI-frame--active";
             }
@@ -130,12 +124,7 @@ document.contains = Element.prototype.contains = function contains(node) {
             bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
             drawer.className = "";
 
-            header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-            header.style.transition = 'margin-top .5s';
-
             var offset = drawer.offsetHeight +'px';
-// 				iframe.style.bottom = offset;
-// 				iframe.style.transition = 'bottom .5s';
             iframe.style.transition = 'transform ' + delay + 's';
             iframe.style.transform = 'translateY(' + offset + ')';
 
@@ -187,10 +176,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // inject style sheet
                 document.getElementsByTagName('head')[0].appendChild(topBarStyles);
 
-
             }
-
-
         }
 
         // initialize the NCI Top Bar iFrame
@@ -219,6 +205,7 @@ document.contains = Element.prototype.contains = function contains(node) {
             // render the iframe
             var renderIframe = function(){
 
+                //TODO: inject after skip link, accessibility elements should be first in DOM order
                 document.body.insertBefore(iframe,document.body.firstChild);
 
                 // set shortcut variable
@@ -234,7 +221,6 @@ document.contains = Element.prototype.contains = function contains(node) {
                 nav = iframeDoc.getElementById("returnToNCI-nav");
                 header = document.body.querySelector('div:not(.skip-link):not(#skip-link),header');
 
-
                 // hook up click events
                 var drawerLinks = iframeDoc.querySelectorAll('#returnToNCI-drawer, #returnToNCI-drawer .chevron');
                 for(var i = 0; i < drawerLinks.length; i++) {
@@ -247,15 +233,21 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // add resize event to window
                 window.addEventListener("optimizedResize", resizeIframe);
 
+
                 // fix center aligned pages
-                var nextEl = iframe.nextElementSibling;
-                if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
-                    nextEl.style.float = 'none';
-                    nextEl.style.display = 'inline-block';
-                }
+                // var nextEl = iframe.nextElementSibling;
+                // if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
+                //     nextEl.style.float = 'none';
+                //     nextEl.style.display = 'inline-block';
+                // }
 
                 // add domain to links for analytics
                 appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
+
+                //set the iframe position
+                header.style.marginTop = header.offsetTop + 24 + 'px';
+                iframe.style.transform = 'translateY(24px)';
+
             };
 
             // inject iframe - doing this on a timeout so that it will be loaded as soon as possible

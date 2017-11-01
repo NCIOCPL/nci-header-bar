@@ -81,7 +81,7 @@ app.use((req, res, next) => {
         var css_file = siteConfig.globalCSS ? siteConfig.globalCSS : defaultConfig.globalCSS;
 
         //Figure out CSS to use
-        winston.info(`using ${css_file}`);
+        winston.info(`CSS: using ${css_file}`);
 
         req.url = `/${css_file}.css`;
     }
@@ -91,7 +91,7 @@ app.use((req, res, next) => {
         var js_file = siteConfig.modules ? siteConfig.modules.returnToNCI : defaultConfig.modules.returnToNCI;
 
         //Figure out CSS to use
-        winston.info(`using ${js_file}`);
+        winston.info(`JS: using ${js_file}`);
 
         req.url = `/modules/returnToNCI/${js_file}.js`;
     }
@@ -104,18 +104,21 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname.replace("server","dist")));
 
 
-app.get("/",proxy({
-    target: scheme + siteConfig.url,
-    changeOrigin: true,
-    onProxyRes: function(proxyRes, req, res) {
-        if(proxyRes.statusCode == 302) {
-            console.log("Got a redirect in GET");
-            //TODO: check protocol for internal redirect
-            //TODO: response for external redirects
-            proxyRes.headers['location'] = "/" + siteConfig.startPage;
-        }
-    }
-}));
+// app.get("/",proxy({
+//     target: scheme + siteConfig.url,
+//     changeOrigin: true,
+//     onProxyRes: function(proxyRes, req, res) {
+//         if(proxyRes.statusCode == 302) {
+//             console.log("Got a redirect in GET");
+//             //TODO: check protocol for internal redirect
+//             //TODO: response for external redirects
+//             proxyRes.headers['location'] = "/" + siteConfig.startPage;
+//         } else {
+//             return true
+//         }
+//     }
+//
+// }));
 
 /** Proxy Content that is not found on the server to www-blue-dev.cancer.gov **/
 app.use(
@@ -126,55 +129,63 @@ app.use(
         changeOrigin: true,
         onProxyRes: function(proxyRes, req, res) {
 
-            //https://github.com/chimurai/http-proxy-middleware/issues/97
-            if (
-                proxyRes.headers &&
-                proxyRes.headers['content-type'] &&
-                proxyRes.headers['content-type'].match('text/html')
-            ) {
-                winston.info('Rewriting Proxy Response -- tis HTML');
+            if (proxyRes.statusCode == 302 || proxyRes.statusCode == 301) {
+                console.log("Got a redirect in GET");
+                //TODO: check protocol for internal redirect
+                //TODO: response for external redirects
+                proxyRes.headers['location'] = "/" + siteConfig.startPage;
+            } else {
 
-                const end = res.end;
-                const writeHead = res.writeHead;
-                const write = res.write;
+                //https://github.com/chimurai/http-proxy-middleware/issues/97
+                if (
+                    proxyRes.headers &&
+                    proxyRes.headers['content-type'] &&
+                    proxyRes.headers['content-type'].match('text/html')
+                ) {
+                    winston.info('Rewriting Proxy Response -- tis HTML');
 
-                let writeHeadArgs;
-                let body;
-                let buffer = new Buffer('');
+                    const end = res.end;
+                    const writeHead = res.writeHead;
+                    const write = res.write;
 
-                // Concat and unzip proxy response
-                proxyRes
-                    .on('data', (chunk) => {
-                        buffer = Buffer.concat([buffer, chunk]);
-                    })
-                    .on('end', () => {
-                        //Should probably account for deflate...
-                        if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
-                            body = zlib.gunzipSync(buffer).toString('utf8');
-                        } else {
-                            body = buffer.toString('utf8');
-                        }
-                    });
+                    let writeHeadArgs;
+                    let body;
+                    let buffer = new Buffer('');
 
-                // Defer write and writeHead
-                res.write = () => {
-                };
-                res.writeHead = (...args) => {
-                    writeHeadArgs = args;
-                };
+                    // Concat and unzip proxy response
+                    proxyRes
+                        .on('data', (chunk) => {
+                            buffer = Buffer.concat([buffer, chunk]);
+                        })
+                        .on('end', () => {
+                            //Should probably account for deflate...
+                            if (proxyRes.headers && proxyRes.headers['content-encoding'] == 'gzip') {
+                                body = zlib.gunzipSync(buffer).toString('utf8');
+                            } else {
+                                body = buffer.toString('utf8');
+                            }
+                        });
 
-                // Update user response at the end
-                res.end = () => {
-                    const output = injectReturnToNCI(body); // some function to manipulate body
+                    // Defer write and writeHead
+                    res.write = () => {
+                    };
+                    res.writeHead = (...args) => {
+                        writeHeadArgs = args;
+                    };
 
-                    res.setHeader('content-length', output.length);
-                    res.removeHeader('content-encoding');
-                    writeHead.apply(res, writeHeadArgs);
+                    // Update user response at the end
+                    res.end = () => {
+                        const output = injectReturnToNCI(body); // some function to manipulate body
 
-                    write.apply(res, [output]);
+                        res.setHeader('content-length', output.length);
+                        res.removeHeader('content-encoding');
+                        writeHead.apply(res, writeHeadArgs);
 
-                    end.apply(res, [""]);
-                };
+                        write.apply(res, [output]);
+
+                        end.apply(res, [""]);
+                    };
+                }
             }
         }
     })
