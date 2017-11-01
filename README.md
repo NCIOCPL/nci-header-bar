@@ -1,5 +1,5 @@
-npm install
-grunt build-watch --proxyhost={{sitename}}
+'''npm install'''
+'''grunt build-watch --proxyhost={{sitename}}'''
 
 check the global-config.json to see which site names are currently supported
 
