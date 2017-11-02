@@ -67,10 +67,12 @@ document.contains = Element.prototype.contains = function contains(node) {
     var NCI_topBar = (function(){
 
         var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
-        var sidr = document.getElementById('sidr-0-button') || document.getElementById('sidr-main');
+        var sidr = document.getElementById('sidr-close') || typeof document.head.innerHTML.match(/sidr/g) !== null;
         //var header = sidr.closest("header") || document.getElementById("wrap");
         //TODO: also get 'header' elements that sometime appear first
         var bodyStyle, bodyClass, header, iframeDoc, drawer, nav;
+
+        console.log(sidr);
 
         // create new DOM nodes
         function create(name, props) {
@@ -119,16 +121,18 @@ document.contains = Element.prototype.contains = function contains(node) {
             delay = typeof delay == 'undefined'? .5 : delay;
             iframe.style.transition = 'transform ' + delay + 's';
 
+            //TODO: bodyClass is just a variable. It's not updating class attributes
+
             if(bodyClass.match(/returnToNCI-frame--active/)) {
-                header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-// 				iframe.style.bottom = offset;
+                // header.style.marginTop = drawer.offsetHeight + 10 + 'px';
+                // iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
 
             } else {
                 offset = parseInt(nav.offsetHeight) + 'px';
-                header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
-// 				iframe.style.bottom = offset;
+                // header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
+                // iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass += " returnToNCI-frame--active";
             }
@@ -148,12 +152,12 @@ document.contains = Element.prototype.contains = function contains(node) {
             // if there is a sidr menu then target the header element, otherwise use body
             if(sidr){
                 console.log('sidr present');
-                header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-                header.style.transition = 'margin-top .5s';
+                // header.style.marginTop = drawer.offsetHeight + 10 + 'px';
+                //header.style.transition = 'margin-top .5s';
 
                 var offset = drawer.offsetHeight +'px';
-// 				iframe.style.bottom = offset;
-// 				iframe.style.transition = 'bottom .5s';
+				// iframe.style.bottom = offset;
+				// iframe.style.transition = 'bottom .5s';
                 iframe.style.transition = 'transform ' + delay + 's';
                 iframe.style.transform = 'translateY(' + offset + ')';
 
@@ -243,6 +247,7 @@ document.contains = Element.prototype.contains = function contains(node) {
             // render the iframe
             var renderIframe = function(){
 
+                //TODO: inject after skip link, accessibility elements should be first in DOM order
                 document.body.insertBefore(iframe,document.body.firstChild);
 
                 // set shortcut variable
@@ -272,14 +277,22 @@ document.contains = Element.prototype.contains = function contains(node) {
                 window.addEventListener("optimizedResize", resizeIframe);
 
                 // fix center aligned pages
-                var nextEl = iframe.nextElementSibling;
-                if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
-                    nextEl.style.float = 'none';
-                    nextEl.style.display = 'inline-block';
-                }
+                // var nextEl = iframe.nextElementSibling;
+                // if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
+                //     nextEl.style.float = 'none';
+                //     nextEl.style.display = 'inline-block';
+                // }
 
                 // add domain to links for analytics
                 appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
+
+                if(sidr) {
+                    //set the iframe position
+                    header.style.marginTop = header.offsetTop + 24 + 'px';
+                    // header.style.marginTop = '24px';
+                    iframe.style.transform = 'translateY(24px)';
+                }
+
             };
 
             // inject iframe - doing this on a timeout so that it will be loaded as soon as possible

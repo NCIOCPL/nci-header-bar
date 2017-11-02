@@ -1,0 +1,9 @@
+/* body styles needed for Return To NCI bar */
+body {
+	display: inline-block;
+	width: 100%;
+}
+
+#returnToNCI-frame {
+	transform:translateY(24px);
+}

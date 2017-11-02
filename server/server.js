@@ -21,7 +21,7 @@ var useHttps = process.env.PROXY_HTTPS === 'true';
 var cssSiteName = process.env.CSS_SITENAME;
 
 const contentTypeRegEx = /.*text\/html.*/i;
-const globCSSPathRegEx = /^\/nci-global\.css(\?.*$|$)/i;
+const globCSSPathRegEx = /\/nci-global\.css(\?.*$|$)/i;
 const returnToNCIPathRegEx = /\/returnToNCI-bar\.js(\?.*$|$)/i;
 
 //We will use handlebars to deal with certain types of templating

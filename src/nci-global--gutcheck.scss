@@ -3,5 +3,6 @@
 //This is the shared global stylesheet for all nci web sites
 //in the future this could be overridden by a site-specific stylesheet.
 
+@import "modules/returnToNCI/global-elements--body";
 @import "modules/returnToNCI/global-elements";
 @import "modules/returnToNCI/global-adjust--gutcheck";
