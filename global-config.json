@@ -97,7 +97,11 @@
             }
         },
         "innovation": {
-            "url": "innovation.cancer.gov"
+            "url": "imat.cancer.gov",
+            "globalCSS": "nci-global--sidr",
+            "modules": {
+                "returnToNCI": "returnToNCI-bar--sidr"
+            }
         },
         "itcr": {
             "url": "itcr.cancer.gov",
@@ -108,10 +112,12 @@
         },
         "nciadvocates": {
             "url": "nciadvocates.cancer.gov",
+            "globalCSS": "nci-global--nciadvocates",
             "startPage": "oarext/OARHome.action"
         },
         "ncifrederick": {
             "url": "ncifrederick.cancer.gov",
+            "globalCSS": "nci-global--ncifrederick",
             "startPage": "Default.aspx"
         },
         "ncl": {
@@ -130,7 +136,8 @@
             "startPage": "nciportfolio/"
         },
         "ocg": {
-            "url": "ocg.cancer.gov"
+            "url": "ocg.cancer.gov",
+            "globalCSS": "nci-global--ocg"
         },
         "prevention": {
             "url": "prevention.cancer.gov"
@@ -154,7 +161,8 @@
             "startPage": "ncipl"
         },
         "sbir": {
-            "url": "sbir.cancer.gov"
+            "url": "sbir.cancer.gov",
+            "globalCSS": "nci-global--sbir"
         },
         "seer": {
             "url": "seer.cancer.gov"
@@ -168,6 +176,7 @@
         },
         "thesaurus": {
             "url": "thesaurus.cancer.gov",
+            "globalCSS": "nci-global--thesaurus",
             "startPage": "ncitbrowser/"
         },
         "vol": {

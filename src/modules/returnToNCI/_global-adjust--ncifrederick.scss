@@ -1,0 +1,4 @@
+@import "mixins";
+// site specific style fix
+
+@include fixedWidth(1040px);

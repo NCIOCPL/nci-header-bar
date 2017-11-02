@@ -1,3 +1,4 @@
+@import 'mixins';
 // site specific style fix
 .minibanner {
   margin: 0;
@@ -9,7 +10,7 @@ footer {
   }
 }
 
-@media only screen and (max-width:970px) {
+@include bp(970px) {
   body {
     background-image: none;
     display: inline-block;
