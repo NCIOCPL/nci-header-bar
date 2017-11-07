@@ -67,12 +67,9 @@ document.contains = Element.prototype.contains = function contains(node) {
     var NCI_topBar = (function(){
 
         var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
-        var sidr = document.getElementById('sidr-close') || typeof document.head.innerHTML.match(/sidr/g) !== null;
-        //var header = sidr.closest("header") || document.getElementById("wrap");
-        //TODO: also get 'header' elements that sometime appear first
-        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav;
 
-        console.log(sidr);
+        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, sidr, skipNavEl;
+
 
         // create new DOM nodes
         function create(name, props) {
@@ -95,6 +92,13 @@ document.contains = Element.prototype.contains = function contains(node) {
                 });
             };
             obj.addEventListener(type, func);
+        }
+
+        //  take a DOM node and returns an index
+        function getNodeIndex( elm ){
+            var c = elm.parentNode.children, i = 0;
+            for(; i < c.length; i++ )
+                if( c[i] == elm ) return i;
         }
 
         //use a css transition to slide the body down and show the menu
@@ -244,11 +248,65 @@ document.contains = Element.prototype.contains = function contains(node) {
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
 
+            var checkSIDR = function(){
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null)
+            };
+
+
+            var checkSkipNav = function(){
+                // collection of known skip nav elements
+                var skipNavs = [
+                    ".skip",
+                    ".skip-link",
+                    "#skip-link",
+                    ".skip2home",
+                    ".skipToContent",
+                    ".skipToContentLink",
+                    ".skipNavigation",
+                    "#skipNav",
+                    ".hiddenStructure",
+                    "#maincontent",
+                    ".genSiteSkipToContent",
+                    ".hideLink"
+                ];
+                //check if any of the skip links are the first child of body - if not then move it before inserting the iframe
+                // var firstChild = document.querySelectorAll("body > :first-child");
+
+                //console.log("searching for skip nav");
+                for (var i = 0, len = skipNavs.length; i < len; i++) {
+
+                    skipNavEl = document.querySelectorAll(skipNavs[i])[0];
+
+                    if(skipNavEl) {
+                        //console.log("skip nav found!");
+                        break;
+                    }
+                }
+
+                if(skipNavEl) {
+                    // index of 0 indicates skipNavEl is the first child element of it's parent
+                    if (skipNavEl.parentNode.tagName !== 'BODY' || getNodeIndex(skipNavEl) !== 0) {
+                        // console.log("skip nav is not the first child element");
+                        // move the skip nav
+                        document.body.insertBefore(skipNavEl,document.body.firstChild);
+                    }
+                    //else {
+                        //console.log("skip nav is positioned properly");
+                    //}
+                }
+            };
+
+
+
+
             // render the iframe
             var renderIframe = function(){
 
-                //TODO: inject after skip link, accessibility elements should be first in DOM order
-                document.body.insertBefore(iframe,document.body.firstChild);
+                if(skipNavEl) {
+                    document.body.insertBefore(iframe,document.body.firstChild.nextSibling);
+                } else {
+                    document.body.insertBefore(iframe,document.body.firstChild);
+                }
 
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
@@ -296,12 +354,14 @@ document.contains = Element.prototype.contains = function contains(node) {
             };
 
             // inject iframe - doing this on a timeout so that it will be loaded as soon as possible
+            // this is basically document.ready
             var injectIframe = function(){
                 if(document.contains(document.body)){
                     // assign variable shortcuts
                     bodyStyle = document.body.style;
                     bodyClass = document.body.className;
-
+                    sidr = checkSIDR();
+                    checkSkipNav();
                     renderIframe();
                 } else {
                     setTimeout(injectIframe,50);
