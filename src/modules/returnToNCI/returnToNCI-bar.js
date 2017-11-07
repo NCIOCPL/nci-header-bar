@@ -303,7 +303,7 @@ document.contains = Element.prototype.contains = function contains(node) {
             var renderIframe = function(){
 
                 if(skipNavEl) {
-                    document.body.insertBefore(iframe,document.body.firstChild.nextSibling);
+                    document.body.insertBefore(iframe,skipNavEl.nextSibling);
                 } else {
                     document.body.insertBefore(iframe,document.body.firstChild);
                 }
