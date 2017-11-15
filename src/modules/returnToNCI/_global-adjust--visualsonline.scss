@@ -2,3 +2,27 @@
 header.banner {
   margin:0;
 }
+
+#returnToNCI-frame {
+  transform:translateY(24px);
+}
+
+.fancybox-lock {
+  .fancybox-overlay-fixed {
+    top: 54px;
+    overflow: visible;
+    &::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 0;
+      right: 0;
+      height: 30px;
+      background-color: rgba(40, 40, 40, 0.984);
+    }
+  }
+}
+
+#fancybox-buttons.top {
+  top: 54px;
+}

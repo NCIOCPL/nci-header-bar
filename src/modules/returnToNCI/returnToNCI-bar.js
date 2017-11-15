@@ -249,7 +249,10 @@ document.contains = Element.prototype.contains = function contains(node) {
             }
 
             var checkSIDR = function(){
-                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null)
+                // sidr applies transforms to the <body> element
+                // fancybox uses fixed elements for the lightbox feature.
+                // fixed elements of a transformed parent become relative to the parent instead of the viewport
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || jQuery.fn.fancybox
             };
 
 
