@@ -227,6 +227,7 @@ document.contains = Element.prototype.contains = function contains(node) {
 
         // initialize the NCI Top Bar iFrame
         function init() {
+
             var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
             //'<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
             var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" /></head>' +
@@ -242,6 +243,24 @@ document.contains = Element.prototype.contains = function contains(node) {
 
             // inject meta tag to force compatibility mode to edge in IE
             // this only seems to work if meta is unset. Has no effect when trying to change an existing content attribute.
+
+
+            // var metas = document.getElementsByTagName('meta');
+            //
+            // var metaContent;
+            //
+            // for (var i=0; i<metas.length; i++) {
+            //     if (metas[i].getAttribute("http-equiv") == "X-UA-Compatible") {
+            //         metaContent = metas[i].getAttribute("content");
+            //     }
+            // }
+            //
+            // if(metaContent){
+            //     metaContent.content = 'IE=edge';
+            // }
+
+
+            // this doesn't seem to work to trigger a different rendering mode when IE=8
             if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
                 document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
             } else {
@@ -252,7 +271,8 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // sidr applies transforms to the <body> element
                 // fancybox uses fixed elements for the lightbox feature.
                 // fixed elements of a transformed parent become relative to the parent instead of the viewport
-                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || jQuery.fn.fancybox
+                var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || sitename === 'vol'
             };
 
 
@@ -366,6 +386,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                     sidr = checkSIDR();
                     checkSkipNav();
                     renderIframe();
+                    console.log(sidr);
                 } else {
                     setTimeout(injectIframe,50);
                 }
@@ -386,6 +407,7 @@ document.contains = Element.prototype.contains = function contains(node) {
 
 
     // Initialize the NCI top bar
+
     NCI_topBar.fetchCSS();
 
 

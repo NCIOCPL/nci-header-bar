@@ -1,8 +1,11 @@
+@import 'mixins';
 // site specific style fix
-body {
-  display: inline-block;
-}
-
 #nci-banner {
   padding-top: 20px;
+}
+
+@include bp(1000px) {
+  body {
+    display: inline-block;
+  }
 }
