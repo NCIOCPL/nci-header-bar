@@ -68,7 +68,7 @@ document.contains = Element.prototype.contains = function contains(node) {
 
         var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
 
-        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, sidr, skipNavEl;
+        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, sidr, isFixed, skipNavEl;
 
 
         // create new DOM nodes
@@ -275,6 +275,11 @@ document.contains = Element.prototype.contains = function contains(node) {
                 return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || sitename === 'vol'
             };
 
+            var checkFixed = function(){
+                return window.getComputedStyle(document.getElementById('returnToNCI-frame'),null).getPropertyValue("position") == 'fixed'
+
+            };
+
 
             var checkSkipNav = function(){
                 // collection of known skip nav elements
@@ -386,7 +391,9 @@ document.contains = Element.prototype.contains = function contains(node) {
                     sidr = checkSIDR();
                     checkSkipNav();
                     renderIframe();
-                    console.log(sidr);
+                    isFixed = checkFixed();
+                    sidr = sidr ? sidr : isFixed ? true : false;
+
                 } else {
                     setTimeout(injectIframe,50);
                 }

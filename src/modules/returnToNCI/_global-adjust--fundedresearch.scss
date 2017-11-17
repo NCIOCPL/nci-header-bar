@@ -4,8 +4,4 @@
   padding-top: 20px;
 }
 
-@include bp(1000px) {
-  body {
-    display: inline-block;
-  }
-}
+@include fixedWidth(1000px);

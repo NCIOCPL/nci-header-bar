@@ -63,7 +63,8 @@
             "startPage": "nciportfolio/"
         },
         "futurefellows": {
-            "url": "futurefellows.cancer.gov"
+            "url": "futurefellows.cancer.gov",
+            "globalCSS": "nci-global--futurefellows"
         },
         "gdc": {
             "url": "gdc.cancer.gov",
