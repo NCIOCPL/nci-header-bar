@@ -180,14 +180,17 @@ document.contains = Element.prototype.contains = function contains(node) {
                 e.stopPropagation();
 
                 var returnToNCI_link = drawer.querySelector('#returnToNCI-link--home');
+                var chevron = returnToNCI_link.nextSibling;
 
                 // close the drawer
                 if(/active/.test(drawer.className)) {
                     drawer.className = "";
                     returnToNCI_link.href = returnToNCI_link.href.replace('open','closed');
+                    chevron.setAttribute('aria-label','Open Drawer');
                 } else {
                     // open the drawer
                     drawer.className = "active";
+                    chevron.setAttribute('aria-label','Close Drawer');
                     returnToNCI_link.href = returnToNCI_link.href.replace('closed','open');
                 }
 
@@ -238,7 +241,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 '<li><a target="_parent" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_">Grants &amp; Training</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_">News &amp; Events</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_">About NCI</a></li>' +
-                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#"></a></div></nav>' +
+                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
                 '</body>';
 
             // inject meta tag to force compatibility mode to edge in IE

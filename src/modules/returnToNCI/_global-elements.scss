@@ -10,10 +10,29 @@
 	left:0;
 	right:0;
 	bottom:calc(100% - 20px);
-	z-index: 10000;
+	z-index: 8000;
 	overflow: hidden;
 	visibility: visible !important;
 }
+
+.skip,
+.skip-link,
+#skip-link,
+.skip2home,
+.skipToContent,
+.skipToContentLink,
+.skipNavigation,
+#skipNav,
+.hiddenStructure,
+#maincontent,
+.genSiteSkipToContent,
+.hideLin {
+	&:focus, a:focus, a.element-invisible:focus {
+		position:absolute !important;
+		z-index: 8001;
+	}
+}
+
 @media print {
 	#returnToNCI-frame {display:none !important;}
 }

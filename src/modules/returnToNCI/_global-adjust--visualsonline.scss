@@ -9,7 +9,7 @@ header.banner {
 
 .fancybox-lock {
   .fancybox-overlay-fixed {
-    top: 54px;
+    top: 30px;
     overflow: visible;
     &::before {
       content: '';
@@ -24,5 +24,5 @@ header.banner {
 }
 
 #fancybox-buttons.top {
-  top: 54px;
+  top: 30px;
 }
