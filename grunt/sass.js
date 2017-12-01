@@ -44,16 +44,13 @@ module.exports = function (grunt, options) {
           //  return Modules.concat(['_src/StyleSheets/environments/prod']);
           //})()
         },
-        files: [
-          {
-            dest: dirs.tmp.base + '/nci-global.css',
-            src: dirs.src.base + '/nci-global.scss'
-          },
-          {
-            dest: dirs.tmp.modules + 'returnToNCI/returnToNCI-bar.css',
-            src: dirs.src.modules + 'returnToNCI/returnToNCI-bar.scss'
-          }          
-        ]
+        files: [{
+            expand: true,
+            cwd: dirs.src.base,
+            src: ["**/*.scss"],
+            dest: dirs.dist.base,
+            ext: ".css"
+        }]
       }
     }
   };
