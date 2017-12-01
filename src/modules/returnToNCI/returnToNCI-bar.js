@@ -285,8 +285,9 @@ document.contains = Element.prototype.contains = function contains(node) {
 
 
             var checkSkipNav = function(){
-                // collection of known skip nav elements
+                // collection of known skip nav elements. Look at them all!
                 var skipNavs = [
+                    "#skip",
                     ".skip",
                     ".skip-link",
                     "#skip-link",
@@ -295,10 +296,12 @@ document.contains = Element.prototype.contains = function contains(node) {
                     ".skipToContentLink",
                     ".skipNavigation",
                     "#skipNav",
+                    ".skip_nav",
                     ".hiddenStructure",
                     "#maincontent",
                     ".genSiteSkipToContent",
-                    ".hideLink"
+                    ".hideLink",
+                    "[href='#Content']"
                 ];
                 //check if any of the skip links are the first child of body - if not then move it before inserting the iframe
                 // var firstChild = document.querySelectorAll("body > :first-child");
@@ -313,6 +316,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                         break;
                     }
                 }
+
 
                 if(skipNavEl) {
                     // index of 0 indicates skipNavEl is the first child element of it's parent

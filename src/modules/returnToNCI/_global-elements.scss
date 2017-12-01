@@ -15,6 +15,7 @@
 	visibility: visible !important;
 }
 
+#skip,
 .skip,
 .skip-link,
 #skip-link,
@@ -23,13 +24,16 @@
 .skipToContentLink,
 .skipNavigation,
 #skipNav,
+.skip_nav,
 .hiddenStructure,
 #maincontent,
 .genSiteSkipToContent,
-.hideLin {
+.hideLink,
+[href="#Content"]{
 	&:focus, a:focus, a.element-invisible:focus {
 		position:absolute !important;
 		z-index: 8001;
+		top: 0;
 	}
 }
 

@@ -10,7 +10,7 @@ footer {
   }
 }
 
-@include bp(970px) {
+@include bp(1000px) {
   body {
     background-image: none;
     display: inline-block;
