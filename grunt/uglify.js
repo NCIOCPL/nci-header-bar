@@ -4,7 +4,7 @@
 module.exports = function (grunt, options) {
     var dirs = options.dirs;
     var pkg = grunt.file.readJSON('package.json');
-    
+
     var files = {
         expand: true,
         cwd: dirs.src.base,
@@ -17,6 +17,7 @@ module.exports = function (grunt, options) {
             preserveComments: 'some',
             maxLineLen: 500
         },
+
         dev: {
             options: {
                 mangle: false,
@@ -39,7 +40,17 @@ module.exports = function (grunt, options) {
                     // return dst + '/' + src.replace('.js', '.min.js');
                     // Or to override to src:
                     //return src;
-                    return dst + '/' + src.replace('.js', '.v' + pkg.version + '.min.js');
+
+                    var module;
+                    var version = pkg.version;
+                    for (module in pkg.modules) {
+                        //check if path contains a module name
+                        if(src.match(module)){
+                            // assign the version number for that module
+                            version = pkg.modules[module].version;
+                        }
+                    }
+                    return dst + '/' + src.replace('.js', '.v' + version + '.min.js');
                 }
             }]
         }

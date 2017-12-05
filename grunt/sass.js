@@ -56,7 +56,16 @@ module.exports = function (grunt, options) {
                 // return dst + '/' + src.replace('.js', '.min.js');
                 // Or to override to src:
                 //return src;
-                return dst + '/' + src.replace('.css', '.v' + pkg.version + '.min.css');
+                var module;
+                var version = pkg.version;
+                for (module in pkg.modules) {
+                    //check if path contains a module name
+                    if(src.match(module)){
+                        // assign the version number for that module
+                        version = pkg.modules[module].version;
+                    }
+                }
+                return dst + '/' + src.replace('.css', '.v' + version + '.min.css');
             }
         }]
       }
