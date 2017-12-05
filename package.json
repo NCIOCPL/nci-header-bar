@@ -1,8 +1,8 @@
 {
-  "name": "nci-header-bar",
+  "name": "nci-modules",
   "version": "1.0.0",
-  "description": "Return to CancerGov Header Bar for NCI Sites",
-  "main": "returnToNCI-bar.js",
+  "description": "Modules for NCI DOC sites",
+  "main": "nci-global.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

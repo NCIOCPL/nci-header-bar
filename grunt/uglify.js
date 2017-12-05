@@ -3,6 +3,8 @@
  ****************************************/
 module.exports = function (grunt, options) {
     var dirs = options.dirs;
+    var pkg = grunt.file.readJSON('package.json');
+    console.log(pkg);
     var files = {
         expand: true,
         cwd: dirs.src.base,
@@ -27,7 +29,19 @@ module.exports = function (grunt, options) {
             options: {
                 mangle: true
             },
-            files: [files]
+            files: [{
+                expand: true,
+                src: ["**/*.js"],
+                dest: dirs.dist.base,
+                cwd: dirs.src.base,
+                rename: function (dst, src) {
+                    // To keep the source js files and make new files as `*.min.js`:
+                    // return dst + '/' + src.replace('.js', '.min.js');
+                    // Or to override to src:
+                    //return src;
+                    return dst + '/' + src.replace('.js', '.v' + pkg.version + '.min.js');
+                }
+            }]
         }
     }
 };
