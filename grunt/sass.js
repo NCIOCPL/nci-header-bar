@@ -65,7 +65,7 @@ module.exports = function (grunt, options) {
                         version = pkg.modules[module].version;
                     }
                 }
-                return dst + '/' + src.replace('.css', '.v' + version + '.min.css');
+                return dst + '/' + src.replace('.css', '-v' + version + '.min.css');
             }
         }]
       }

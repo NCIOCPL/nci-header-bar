@@ -50,7 +50,7 @@ module.exports = function (grunt, options) {
                             version = pkg.modules[module].version;
                         }
                     }
-                    return dst + '/' + src.replace('.js', '.v' + version + '.min.js');
+                    return dst + '/' + src.replace('.js', '-v' + version + '.min.js');
                 }
             }]
         }
