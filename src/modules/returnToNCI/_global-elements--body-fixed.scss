@@ -1,0 +1,9 @@
+/* body styles needed for Return To NCI bar */
+body {
+	margin-top: 24px;
+}
+
+#returnToNCI-frame {
+	transform:translateY(24px);
+	position:fixed !important;
+}

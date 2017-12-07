@@ -1,0 +1,42 @@
+//Global elements for returnToNCI bar for inclusion in nci-global.css
+#returnToNCI-frame {
+	/* display:block !important; */
+	border:0;
+	margin:0;
+	width:100%;
+	min-width: 320px;
+	max-width: 100%;
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:calc(100% - 20px);
+	z-index: 8000;
+	overflow: hidden;
+	visibility: visible !important;
+}
+
+#skip,
+.skip,
+.skip-link,
+#skip-link,
+.skip2home,
+.skipToContent,
+.skipToContentLink,
+.skipNavigation,
+#skipNav,
+.skip_nav,
+.hiddenStructure,
+#maincontent,
+.genSiteSkipToContent,
+.hideLink,
+[href="#Content"]{
+	&:focus, a:focus, a.element-invisible:focus {
+		position:absolute !important;
+		z-index: 8001;
+		top: 0;
+	}
+}
+
+@media print {
+	#returnToNCI-frame {display:none !important;}
+}

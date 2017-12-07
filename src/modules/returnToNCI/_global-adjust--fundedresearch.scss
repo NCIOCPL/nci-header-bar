@@ -1,0 +1,7 @@
+@import 'mixins';
+// site specific style fix
+#nci-banner {
+  padding-top: 20px;
+}
+
+@include fixedWidth(1000px);

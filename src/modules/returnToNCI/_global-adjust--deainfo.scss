@@ -1,0 +1,7 @@
+@import 'mixins';
+// site specific style fix
+#primaryNav {
+  clear: left;
+}
+
+@include fixedWidth(960px);

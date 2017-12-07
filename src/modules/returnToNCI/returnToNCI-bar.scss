@@ -1,7 +1,10 @@
+@charset "utf-8";
+
+//This stylesheet is specifically for the return to top bar's styling.
 body {
     margin:0;
     overflow: hidden;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
 }
 
 #returnToNCI-nav {
@@ -11,7 +14,7 @@ body {
     text-align: center;
     font-size:10px;
     line-height: 14px;
-    font-family: 'Noto Sans',ArialMT, Arial;
+    font-family: 'Noto Sans',ArialMT, Arial, sans-serif;
     bottom:20px;
     left:0;
     right:0;

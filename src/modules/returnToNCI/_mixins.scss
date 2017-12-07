@@ -1,0 +1,13 @@
+@mixin fixedWidth($fwidth) {
+  @media only screen and (max-width:$fwidth) {
+    body {
+      display: inline-block;
+    }
+  }
+}
+
+@mixin bp($point) {
+  @media only screen and (max-width:$point) {
+    @content;
+  }
+}

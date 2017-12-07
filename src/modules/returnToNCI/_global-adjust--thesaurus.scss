@@ -1,0 +1,16 @@
+@import "mixins";
+// site specific style fix
+
+body > div:nth-of-type(2) {
+  /* override style attribute */
+  margin-top: 0 !important;
+  height: auto !important;
+  padding: 4px 0 !important;
+}
+
+@include bp(945px) {
+  body {
+    background-image: none;
+    display: inline-block;
+  }
+}

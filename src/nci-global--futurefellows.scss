@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+//This is the shared global stylesheet for all nci web sites
+//in the future this could be overridden by a site-specific stylesheet.
+
+@import "modules/returnToNCI/global-elements--body-fixed";
+@import "modules/returnToNCI/global-elements";
+
+@import "modules/returnToNCI/global-adjust--futurefellows";

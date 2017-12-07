@@ -67,10 +67,9 @@ document.contains = Element.prototype.contains = function contains(node) {
     var NCI_topBar = (function(){
 
         var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
-        var sidr = document.getElementById('sidr-0-button') || document.getElementById('sidr-main');
-        //var header = sidr.closest("header") || document.getElementById("wrap");
-        //TODO: also get 'header' elements that sometime appear first
-        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav;
+
+        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, sidr, isFixed, skipNavEl;
+
 
         // create new DOM nodes
         function create(name, props) {
@@ -93,6 +92,13 @@ document.contains = Element.prototype.contains = function contains(node) {
                 });
             };
             obj.addEventListener(type, func);
+        }
+
+        //  take a DOM node and returns an index
+        function getNodeIndex( elm ){
+            var c = elm.parentNode.children, i = 0;
+            for(; i < c.length; i++ )
+                if( c[i] == elm ) return i;
         }
 
         //use a css transition to slide the body down and show the menu
@@ -119,16 +125,18 @@ document.contains = Element.prototype.contains = function contains(node) {
             delay = typeof delay == 'undefined'? .5 : delay;
             iframe.style.transition = 'transform ' + delay + 's';
 
+            //TODO: bodyClass is just a variable. It's not updating class attributes
+
             if(bodyClass.match(/returnToNCI-frame--active/)) {
-                header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-// 				iframe.style.bottom = offset;
+                // header.style.marginTop = drawer.offsetHeight + 10 + 'px';
+                // iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass = bodyClass.replace(" returnToNCI-frame--active","");
 
             } else {
                 offset = parseInt(nav.offsetHeight) + 'px';
-                header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
-// 				iframe.style.bottom = offset;
+                // header.style.marginTop = parseInt(drawer.style.height) - 10 + 'px';
+                // iframe.style.bottom = offset;
                 iframe.style.transform = 'translateY(' + offset + ')';
                 bodyClass += " returnToNCI-frame--active";
             }
@@ -148,12 +156,12 @@ document.contains = Element.prototype.contains = function contains(node) {
             // if there is a sidr menu then target the header element, otherwise use body
             if(sidr){
                 console.log('sidr present');
-                header.style.marginTop = drawer.offsetHeight + 10 + 'px';
-                header.style.transition = 'margin-top .5s';
+                // header.style.marginTop = drawer.offsetHeight + 10 + 'px';
+                //header.style.transition = 'margin-top .5s';
 
                 var offset = drawer.offsetHeight +'px';
-// 				iframe.style.bottom = offset;
-// 				iframe.style.transition = 'bottom .5s';
+				// iframe.style.bottom = offset;
+				// iframe.style.transition = 'bottom .5s';
                 iframe.style.transition = 'transform ' + delay + 's';
                 iframe.style.transform = 'translateY(' + offset + ')';
 
@@ -172,14 +180,17 @@ document.contains = Element.prototype.contains = function contains(node) {
                 e.stopPropagation();
 
                 var returnToNCI_link = drawer.querySelector('#returnToNCI-link--home');
+                var chevron = returnToNCI_link.nextSibling;
 
                 // close the drawer
                 if(/active/.test(drawer.className)) {
                     drawer.className = "";
                     returnToNCI_link.href = returnToNCI_link.href.replace('open','closed');
+                    chevron.setAttribute('aria-label','Open Drawer');
                 } else {
                     // open the drawer
                     drawer.className = "active";
+                    chevron.setAttribute('aria-label','Close Drawer');
                     returnToNCI_link.href = returnToNCI_link.href.replace('closed','open');
                 }
 
@@ -196,7 +207,7 @@ document.contains = Element.prototype.contains = function contains(node) {
 
         function fetchCSS(){
             //check if returnToNCI-bar--parent.css has been included, if not then download it
-            if(document.querySelectorAll('link[href*="returnToNCI-bar"]')[0]){
+            if(document.querySelectorAll('link[href*="nci-global"]')[0]){
                 init();
             } else {
                 // production path
@@ -206,7 +217,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css',onload:init()});
 
                 //dev path
-                var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--parent.css',onload:init()});
+                var topBarStyles = create('link',{rel:'stylesheet',href:'/modules/returnToNCI/returnToNCI-bar.css',onload:init()});
 
                 // inject style sheet
                 document.getElementsByTagName('head')[0].appendChild(topBarStyles);
@@ -219,9 +230,10 @@ document.contains = Element.prototype.contains = function contains(node) {
 
         // initialize the NCI Top Bar iFrame
         function init() {
+
             var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
             //'<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
-            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//www-red-dev.cancer.gov/PublishedContent/Styles/returnToNCI-bar--child.css" /></head>' +
+            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" /></head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_">Cancer Types</a></li>' +
@@ -229,21 +241,107 @@ document.contains = Element.prototype.contains = function contains(node) {
                 '<li><a target="_parent" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_">Grants &amp; Training</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_">News &amp; Events</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_">About NCI</a></li>' +
-                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#"></a></div></nav>' +
+                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
                 '</body>';
 
             // inject meta tag to force compatibility mode to edge in IE
             // this only seems to work if meta is unset. Has no effect when trying to change an existing content attribute.
+
+
+            // var metas = document.getElementsByTagName('meta');
+            //
+            // var metaContent;
+            //
+            // for (var i=0; i<metas.length; i++) {
+            //     if (metas[i].getAttribute("http-equiv") == "X-UA-Compatible") {
+            //         metaContent = metas[i].getAttribute("content");
+            //     }
+            // }
+            //
+            // if(metaContent){
+            //     metaContent.content = 'IE=edge';
+            // }
+
+
+            // this doesn't seem to work to trigger a different rendering mode when IE=8
             if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
                 document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
             } else {
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
 
+            var checkSIDR = function(){
+                // sidr applies transforms to the <body> element
+                // fancybox uses fixed elements for the lightbox feature.
+                // fixed elements of a transformed parent become relative to the parent instead of the viewport
+                var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || sitename === 'vol'
+            };
+
+            var checkFixed = function(){
+                return window.getComputedStyle(document.getElementById('returnToNCI-frame'),null).getPropertyValue("position") == 'fixed'
+
+            };
+
+
+            var checkSkipNav = function(){
+                // collection of known skip nav elements. Look at them all!
+                var skipNavs = [
+                    "#skip",
+                    ".skip",
+                    ".skip-link",
+                    "#skip-link",
+                    ".skip2home",
+                    ".skipToContent",
+                    ".skipToContentLink",
+                    ".skipNavigation",
+                    "#skipNav",
+                    ".skip_nav",
+                    ".hiddenStructure",
+                    "#maincontent",
+                    ".genSiteSkipToContent",
+                    ".hideLink",
+                    "[href='#Content']"
+                ];
+                //check if any of the skip links are the first child of body - if not then move it before inserting the iframe
+                // var firstChild = document.querySelectorAll("body > :first-child");
+
+                //console.log("searching for skip nav");
+                for (var i = 0, len = skipNavs.length; i < len; i++) {
+
+                    skipNavEl = document.querySelectorAll(skipNavs[i])[0];
+
+                    if(skipNavEl) {
+                        //console.log("skip nav found!");
+                        break;
+                    }
+                }
+
+
+                if(skipNavEl) {
+                    // index of 0 indicates skipNavEl is the first child element of it's parent
+                    if (skipNavEl.parentNode.tagName !== 'BODY' || getNodeIndex(skipNavEl) !== 0) {
+                        // console.log("skip nav is not the first child element");
+                        // move the skip nav
+                        document.body.insertBefore(skipNavEl,document.body.firstChild);
+                    }
+                    //else {
+                        //console.log("skip nav is positioned properly");
+                    //}
+                }
+            };
+
+
+
+
             // render the iframe
             var renderIframe = function(){
 
-                document.body.insertBefore(iframe,document.body.firstChild);
+                if(skipNavEl) {
+                    document.body.insertBefore(iframe,skipNavEl.nextSibling);
+                } else {
+                    document.body.insertBefore(iframe,document.body.firstChild);
+                }
 
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
@@ -272,24 +370,37 @@ document.contains = Element.prototype.contains = function contains(node) {
                 window.addEventListener("optimizedResize", resizeIframe);
 
                 // fix center aligned pages
-                var nextEl = iframe.nextElementSibling;
-                if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
-                    nextEl.style.float = 'none';
-                    nextEl.style.display = 'inline-block';
-                }
+                // var nextEl = iframe.nextElementSibling;
+                // if (window.getComputedStyle(nextEl).float == 'left' || window.getComputedStyle(nextEl).cssFloat == 'left'){
+                //     nextEl.style.float = 'none';
+                //     nextEl.style.display = 'inline-block';
+                // }
 
                 // add domain to links for analytics
                 appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
+
+                if(sidr) {
+                    //set the iframe position
+                    header.style.marginTop = header.offsetTop + 24 + 'px';
+                    // header.style.marginTop = '24px';
+                    iframe.style.transform = 'translateY(24px)';
+                }
+
             };
 
             // inject iframe - doing this on a timeout so that it will be loaded as soon as possible
+            // this is basically document.ready
             var injectIframe = function(){
                 if(document.contains(document.body)){
                     // assign variable shortcuts
                     bodyStyle = document.body.style;
                     bodyClass = document.body.className;
-
+                    sidr = checkSIDR();
+                    checkSkipNav();
                     renderIframe();
+                    isFixed = checkFixed();
+                    sidr = sidr ? sidr : isFixed ? true : false;
+
                 } else {
                     setTimeout(injectIframe,50);
                 }
@@ -310,6 +421,7 @@ document.contains = Element.prototype.contains = function contains(node) {
 
 
     // Initialize the NCI top bar
+
     NCI_topBar.fetchCSS();
 
 

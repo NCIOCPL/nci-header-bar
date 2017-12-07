@@ -1,0 +1,43 @@
+{
+  "name": "nci-modules",
+  "version": "1.0.0",
+  "description": "Modules for NCI DOC sites",
+  "main": "nci-global.js",
+  "modules": {
+    "returnToNCI": {
+      "version": "1.0.0"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nciocpl/nci-header-bar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nciocpl/nci-header-bar/issues"
+  },
+  "homepage": "https://github.com/nciocpl/nci-header-bar#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "express-http-proxy": "^1.0.6",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-develop": "^0.4.0",
+    "grunt-sass": "^2.0.0",
+    "http-proxy-middleware": "^0.17.4",
+    "load-grunt-config": "^0.19.2",
+    "morgan": "^1.8.2",
+    "winston": "^2.3.1"
+  }
+}
