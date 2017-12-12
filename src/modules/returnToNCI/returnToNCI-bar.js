@@ -62,14 +62,42 @@ document.contains = Element.prototype.contains = function contains(node) {
     }
 })(window.Element.prototype); // END: Closest
 
+// recursive object merge
+var merge = function() {
+    var obj = {},
+        i = 0,
+        il = arguments.length,
+        key;
+    for (; i < il; i++) {
+        for (key in arguments[i]) {
+            if (arguments[i].hasOwnProperty(key)) {
+                obj[key] = arguments[i][key];
+            }
+        }
+    }
+    return obj;
+};
+
 // NCI Top Bar
 ;(function( ){
     var NCI_topBar = (function(){
 
         var iframe = create('iframe',{id:'returnToNCI-frame',width:'100%',scrolling:'no',style:'position:absolute;visibility:hidden'});
 
-        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, sidr, isFixed, skipNavEl;
+        var bodyStyle, bodyClass, header, iframeDoc, drawer, nav, noTransform, isFixed, skipNavEl, settings;
 
+        // This is an example of settings that will be set through DTM
+        // window.Linkback = {
+        //     hasModalPopup: true,
+        //     hasSIDR: false,
+        //     hasFixedHeader: false
+        // };
+
+        var defaults = {
+            hasModalPopup: false,
+            hasSIDR: false,
+            hasFixedHeader: false
+        };
 
         // create new DOM nodes
         function create(name, props) {
@@ -154,8 +182,8 @@ document.contains = Element.prototype.contains = function contains(node) {
             drawer.className = "";
 
             // if there is a sidr menu then target the header element, otherwise use body
-            if(sidr){
-                console.log('sidr present');
+            if(noTransform){
+                //console.log('sidr present');
                 // header.style.marginTop = drawer.offsetHeight + 10 + 'px';
                 //header.style.transition = 'margin-top .5s';
 
@@ -195,7 +223,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 }
 
                 // if there is a sidr menu then slide the header instead of the body
-                sidr?slideHeader():slideBody();
+                noTransform?slideHeader():slideBody();
             }
         }
 
@@ -205,35 +233,15 @@ document.contains = Element.prototype.contains = function contains(node) {
             }
         }
 
-        function fetchCSS(){
-            //check if returnToNCI-bar--parent.css has been included, if not then download it
-            if(document.querySelectorAll('link[href*="nci-global"]')[0]){
-                init();
-            } else {
-                // production path
-                //var topBarStyles = create('link',{rel:'stylesheet',href:'//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--parent.css',onload:init()});
-
-                // testing load failure
-                // var topBarStyles = create('link',{rel:'stylesheet',href:'//www-red-dev.cancer.gov/fail.css',onload:init()});
-
-                //dev path
-                var topBarStyles = create('link',{rel:'stylesheet',href:'/modules/returnToNCI/returnToNCI-bar.css',onload:init()});
-
-                // inject style sheet
-                document.getElementsByTagName('head')[0].appendChild(topBarStyles);
-
-
-            }
-
-
-        }
-
         // initialize the NCI Top Bar iFrame
         function init() {
+            // PROD styles
+            var barStyles = '<link rel="stylesheet" href="//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css" />';
+            // DEV styles
+            // var barStyles = '<link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" />';
 
             var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
-            //'<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="//static.cancer.gov/returnToNCI-bar/returnToNCI-bar--child.css" /></head>' +
-            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" /></head>' +
+            var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />'+ barStyles +'</head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
                 '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_">Cancer Types</a></li>' +
@@ -270,12 +278,12 @@ document.contains = Element.prototype.contains = function contains(node) {
                 document.getElementsByTagName('head')[0].appendChild(meta);
             }
 
-            var checkSIDR = function(){
+            var checkTransform = function(){
                 // sidr applies transforms to the <body> element
                 // fancybox uses fixed elements for the lightbox feature.
                 // fixed elements of a transformed parent become relative to the parent instead of the viewport
-                var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
-                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || sitename === 'vol'
+                //var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || settings.hasModalPopup || settings.hasSIDR || settings.hasFixedHeader
             };
 
             var checkFixed = function(){
@@ -354,7 +362,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // set shortcut variable
                 drawer = iframeDoc.getElementById("returnToNCI-drawer");
                 nav = iframeDoc.getElementById("returnToNCI-nav");
-                header = sidr?document.body.querySelector('div:not(.skip-link):not(#skip-link),header'):null;
+                header = noTransform?document.body.querySelector('div:not(.skip-link):not(#skip-link),header'):null;
 
 
                 // hook up click events
@@ -379,7 +387,7 @@ document.contains = Element.prototype.contains = function contains(node) {
                 // add domain to links for analytics
                 appendDomain(iframeDoc.querySelectorAll('a:not(.chevron)'));
 
-                if(sidr) {
+                if(noTransform) {
                     //set the iframe position
                     header.style.marginTop = header.offsetTop + 24 + 'px';
                     // header.style.marginTop = '24px';
@@ -392,14 +400,16 @@ document.contains = Element.prototype.contains = function contains(node) {
             // this is basically document.ready
             var injectIframe = function(){
                 if(document.contains(document.body)){
+                    // this will work even if window.Linkback is undefined
+                    settings = merge(defaults,window.Linkback);
                     // assign variable shortcuts
                     bodyStyle = document.body.style;
                     bodyClass = document.body.className;
-                    sidr = checkSIDR();
+                    noTransform = checkTransform();
                     checkSkipNav();
                     renderIframe();
                     isFixed = checkFixed();
-                    sidr = sidr ? sidr : isFixed ? true : false;
+                    noTransform = noTransform ? noTransform : isFixed ? true : false;
 
                 } else {
                     setTimeout(injectIframe,50);
@@ -413,16 +423,14 @@ document.contains = Element.prototype.contains = function contains(node) {
 
         // return public methods and variables
         return {
-            init: init,
-            fetchCSS: fetchCSS
+            init: init
         };
 
     })(); // END: NCI top bar module
 
 
     // Initialize the NCI top bar
-
-    NCI_topBar.fetchCSS();
+    NCI_topBar.init();
 
 
 })( );
