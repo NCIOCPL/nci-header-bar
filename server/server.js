@@ -71,6 +71,8 @@ function injectReturnToNCI(body) {
     //can it be at the end of the body, etc.  The placement will matter.
     let modified = body;
     modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script>`);
+    // added Linkback object for testing
+    // modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script><script>window.Linkback={hasModalPopup:false, hasSIDR:false, hasFixedHeader:false}</script>`);
     return modified;
 }
 
