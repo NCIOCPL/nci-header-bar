@@ -17,7 +17,7 @@ TODO:
 This method of proxying does not use the source code, but can use a DTM property for testing.  This can be used to test out a property before sending it to a sites development team.  This can also be used to test new versions of the code before rolling out to existing sites.
 1. Open a terminal (Command Line, Git Bash, actual Bash)
 2. Run `grunt dtm-proxy --dtm-property-id=<PROPERTY_ID> --proxyhost=<HOSTNAME>`.  Optionally if you need to strip out the WA_SITENAME_Pageload analytics tag, use `grunt dtm-proxy --dtm-property-id=<PROPERTY_ID> --proxyhost=<HOSTNAME> --remove-analytics`
-..* Where <PROPERTY_ID> is found by going to a DTM property, selecting Embed, viewing the staging Header Code and pulling out the PROPERTY_ID from the src http://assets.adobedtm.com/<COMPANY_ID>/satelliteLib-<PROPERTY_ID>-staging.js.
-..* <HOSTNAME> is something like www.cancer.gov
+   * Where <PROPERTY_ID> is found by going to a DTM property, selecting Embed, viewing the staging Header Code and pulling out the PROPERTY_ID from the src http://assets.adobedtm.com/<COMPANY_ID>/satelliteLib-<PROPERTY_ID>-staging.js.
+   * <HOSTNAME> is something like www.cancer.gov
 
 
