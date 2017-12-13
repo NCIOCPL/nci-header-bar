@@ -33,6 +33,10 @@ const headTagRegEx = /^.*<head[^>]*>/im;
 //...we will see if that is the case
 const bodyCloseTagRegEx = /<\/body\s*>/i;
 
+//Analytics removal
+var removeAnalytics = process.env.REMOVE_ANALYTICS === 'true';
+const waScriptRegEx = /(<script type="text\/javascript" src="(https:)?\/\/static.cancer.gov\/webanalytics\/WA_(.*)_PageLoad.js[^"]*"><\/script>)/i;
+
 
 //We will use handlebars to deal with certain types of templating
 //mainly error pages.  THIS SHOULD NOT BE USED FOR WEBSITE CONTENT!!!
@@ -242,6 +246,21 @@ function injectDTM(body) {
             throw new Error("No Head Tag Found");
         }
 
+    }
+
+    //Strip out analytics?
+    if (removeAnalytics) {
+        let waMatch = modified.match(waScriptRegEx);
+
+        if (waMatch) {
+            winston.info("Removing Web Analytics");
+            let waMatchLength = waMatch[0].length;
+            let waPreceedingText = modified.substring(0, waMatch.index);
+            let waFollowingText = modified.substring(waMatch.index + waMatchLength, modified.length);
+            modified = waPreceedingText + waFollowingText;
+        } else {
+            winston.warn("There is no analytics tag to remove")
+        }
     }
 
     return modified;
