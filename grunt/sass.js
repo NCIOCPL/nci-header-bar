@@ -65,6 +65,14 @@ module.exports = function (grunt, options) {
                         version = pkg.modules[module].version;
                     }
                 }
+                // site version can override global version
+                for (site in pkg.siteVersion) {
+                    // console.log(site);
+                    if(src.match(site)){
+                        // assign the version number for that module
+                        version = pkg.siteVersion[site];
+                    }
+                }
                 return dst + '/' + src.replace('.css', '-v' + version + '.min.css');
             }
         }]

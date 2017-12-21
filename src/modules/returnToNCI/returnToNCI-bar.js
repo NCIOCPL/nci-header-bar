@@ -96,7 +96,8 @@ var merge = function() {
         var defaults = {
             hasModalPopup: false,
             hasSIDR: false,
-            hasFixedHeader: false
+            hasFixedHeader: false,
+            returnToNci_cssPath: '//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css'
         };
 
         // create new DOM nodes
@@ -233,14 +234,13 @@ var merge = function() {
             }
         }
 
-        // initialize the NCI Top Bar iFrame
-        function init() {
+        function createBar() {
             // PROD styles
-            var barStyles = '<link rel="stylesheet" href="//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css" />';
+            var barStyles = '<link rel="stylesheet" href="'+ settings.returnToNci_cssPath +'" />';
             // DEV styles
             // var barStyles = '<link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" />';
 
-            var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+
             var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />'+ barStyles +'</head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
@@ -270,13 +270,16 @@ var merge = function() {
             //     metaContent.content = 'IE=edge';
             // }
 
+            return content;
 
-            // this doesn't seem to work to trigger a different rendering mode when IE=8
-            if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
-                document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
-            } else {
-                document.getElementsByTagName('head')[0].appendChild(meta);
-            }
+
+
+        }
+
+
+        // initialize the NCI Top Bar iFrame
+        function init() {
+
 
             var checkTransform = function(){
                 // sidr applies transforms to the <body> element
@@ -345,14 +348,26 @@ var merge = function() {
             // render the iframe
             var renderIframe = function(){
 
+                // inject iFrame after skip nav if it's present
                 if(skipNavEl) {
                     document.body.insertBefore(iframe,skipNavEl.nextSibling);
                 } else {
                     document.body.insertBefore(iframe,document.body.firstChild);
                 }
 
+                // update the meta tag for IE to prevent rendering in old browser modes
+                var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+                // this doesn't seem to work to trigger a different rendering mode when IE=8
+                if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
+                    document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
+                } else {
+                    document.getElementsByTagName('head')[0].appendChild(meta);
+                }
+
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
+                var content = createBar();
+
 
                 //inject top bar markup
                 iframeDoc.open();
