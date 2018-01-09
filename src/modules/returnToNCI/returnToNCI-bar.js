@@ -96,7 +96,8 @@ var merge = function() {
         var defaults = {
             hasModalPopup: false,
             hasSIDR: false,
-            hasFixedHeader: false
+            hasFixedHeader: false,
+            returnToNci_cssPath: '//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css'
         };
 
         // create new DOM nodes
@@ -233,14 +234,13 @@ var merge = function() {
             }
         }
 
-        // initialize the NCI Top Bar iFrame
-        function init() {
+        function createBar() {
             // PROD styles
-            var barStyles = '<link rel="stylesheet" href="//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css" />';
+            var barStyles = '<link rel="stylesheet" href="'+ settings.returnToNci_cssPath +'" />';
             // DEV styles
             // var barStyles = '<link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" />';
 
-            var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+
             var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />'+ barStyles +'</head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
                 '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_">About Cancer</a></li>' +
@@ -254,8 +254,6 @@ var merge = function() {
 
             // inject meta tag to force compatibility mode to edge in IE
             // this only seems to work if meta is unset. Has no effect when trying to change an existing content attribute.
-
-
             // var metas = document.getElementsByTagName('meta');
             //
             // var metaContent;
@@ -268,15 +266,21 @@ var merge = function() {
             //
             // if(metaContent){
             //     metaContent.content = 'IE=edge';
+            // } else {
+            //     metaContent = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+            //     document.getElementsByTagName('head')[0].appendChild(metaContent);
             // }
 
+            return content;
 
-            // this doesn't seem to work to trigger a different rendering mode when IE=8
-            if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
-                document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
-            } else {
-                document.getElementsByTagName('head')[0].appendChild(meta);
-            }
+
+
+        }
+
+
+        // initialize the NCI Top Bar iFrame
+        function init() {
+
 
             var checkTransform = function(){
                 // sidr applies transforms to the <body> element
@@ -345,6 +349,7 @@ var merge = function() {
             // render the iframe
             var renderIframe = function(){
 
+                // inject iFrame after skip nav if it's present
                 if(skipNavEl) {
                     document.body.insertBefore(iframe,skipNavEl.nextSibling);
                 } else {
@@ -353,6 +358,8 @@ var merge = function() {
 
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
+                var content = createBar();
+
 
                 //inject top bar markup
                 iframeDoc.open();

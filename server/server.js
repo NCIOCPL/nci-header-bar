@@ -73,6 +73,8 @@ function injectReturnToNCI(body) {
     modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script>`);
     // added Linkback object for testing
     // modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script><script>window.Linkback={hasModalPopup:false, hasSIDR:false, hasFixedHeader:false}</script>`);
+    // testing custom CSS paths for CCR by assigning to settings
+    // modified = body.replace(/(<\/head>)/i, `<link rel="stylesheet" href="/nci-global.css?sitename=${proxyEnv}" /><script src="/modules/returnToNCI/returnToNCI-bar.js?sitename=${proxyEnv}"></script><script>window.Linkback={returnToNci_cssPath:'/ccr/module/returnToNCI-bar.css'}</script>`);
     return modified;
 }
 
