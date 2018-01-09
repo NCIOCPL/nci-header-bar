@@ -254,8 +254,6 @@ var merge = function() {
 
             // inject meta tag to force compatibility mode to edge in IE
             // this only seems to work if meta is unset. Has no effect when trying to change an existing content attribute.
-
-
             // var metas = document.getElementsByTagName('meta');
             //
             // var metaContent;
@@ -268,6 +266,9 @@ var merge = function() {
             //
             // if(metaContent){
             //     metaContent.content = 'IE=edge';
+            // } else {
+            //     metaContent = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+            //     document.getElementsByTagName('head')[0].appendChild(metaContent);
             // }
 
             return content;
@@ -354,15 +355,6 @@ var merge = function() {
                 } else {
                     document.body.insertBefore(iframe,document.body.firstChild);
                 }
-
-                // update the meta tag for IE to prevent rendering in old browser modes
-                // var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
-                // // this doesn't seem to work to trigger a different rendering mode when IE=8
-                // if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
-                //     document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
-                // } else {
-                //     document.getElementsByTagName('head')[0].appendChild(meta);
-                // }
 
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
