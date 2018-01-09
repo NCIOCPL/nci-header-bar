@@ -64,7 +64,42 @@ module.exports = function(grunt) {
         ];
 
         grunt.task.run(tasks);
-    });    
+    });
+
+    grunt.registerTask('dtm-proxy', 'Proxy using DTM', function(env) {
+        var useHttps = true;
+
+        var dtm_property_id = grunt.option('dtm-property-id');
+        //The assumption is that this is the company id, it does not change across properties.
+        var dtm_company_id = grunt.option('dtm-company-id') || 'f1bfa9f7170c81b1a9a9ecdcc6c5215ee0b03c84';
+
+        //Should we strip out WA_XXXX_Pageload tag from content so analytics come from DTM
+        var remove_analytics = grunt.option('remove-analytics');
+
+        if (dtm_property_id == "") {
+            grunt.fail.error("--dtm-property-id is required");
+        }
+        
+        grunt.config('env', env);
+        grunt.config.merge({
+            develop: {
+                server: {
+                    file: './server/dtm-proxy.js',
+                    env: {
+                        DTM_PROPERTY_ID: dtm_property_id,
+                        DTM_COMPANY_ID: dtm_company_id,
+                        PROXY_ENV: proxyhost,
+                        PROXY_HTTPS: useHttps,
+                        REMOVE_ANALYTICS: remove_analytics
+                        
+                    }
+                }
+            }            
+        })
+
+        grunt.task.run(['develop', 'watch']);
+
+    });
 
     grunt.registerTask('build-watch', 'Proxy header', function(env) {
         var useHttps = true;
