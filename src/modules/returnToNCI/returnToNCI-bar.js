@@ -356,13 +356,13 @@ var merge = function() {
                 }
 
                 // update the meta tag for IE to prevent rendering in old browser modes
-                var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
-                // this doesn't seem to work to trigger a different rendering mode when IE=8
-                if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
-                    document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
-                } else {
-                    document.getElementsByTagName('head')[0].appendChild(meta);
-                }
+                // var meta = create('meta',{httpEquiv:"X-UA-Compatible",content:"IE=edge"});
+                // // this doesn't seem to work to trigger a different rendering mode when IE=8
+                // if(document.querySelector('meta[http-equiv=X-UA-Compatible]')){
+                //     document.querySelector('meta[http-equiv=X-UA-Compatible]').content = 'IE=edge';
+                // } else {
+                //     document.getElementsByTagName('head')[0].appendChild(meta);
+                // }
 
                 // set shortcut variable
                 iframeDoc = iframe.contentWindow.document;
