@@ -1,5 +1,5 @@
 /* body styles needed to make room for Return To NCI bar */
-body {
+body:not(.toolbar) { //toolbar class indicates Drupal admin mode
   transform:translateY(24px);
   overflow: visible;
 }
