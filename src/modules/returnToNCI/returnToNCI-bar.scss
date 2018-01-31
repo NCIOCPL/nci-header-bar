@@ -51,9 +51,9 @@ body {
     cursor: pointer;
 }
 
-#returnToNCI-drawer .chevron {
+#returnToNCI-drawer .chevron {  
     position: absolute;
-    bottom: 0;
+    bottom: 1px;
     left: 50%;
     transform: translateX(-50%) translateY(20px);
     width: 45px;
@@ -64,6 +64,12 @@ body {
     padding: 2px;
     text-align: center;
     z-index: -1;
+
+    &:focus {
+        outline: solid #1c5e86 1px;
+        -moz-outline: solid #1c5e86 1px;
+}
+    
 }
 #returnToNCI-drawer .chevron::before {
     border-style: solid;
