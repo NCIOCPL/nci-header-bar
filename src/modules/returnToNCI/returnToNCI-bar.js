@@ -294,6 +294,10 @@ var merge = function() {
         // initialize the NCI Top Bar iFrame
         function init() {
 
+            // kick out of init if body has .toolbar class - indicates Drupal admin mode
+            if(document.body.classList.contains('toolbar')){
+                return false
+            }
 
             var checkTransform = function(){
                 // sidr applies transforms to the <body> element
