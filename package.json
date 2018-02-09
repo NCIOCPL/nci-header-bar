@@ -9,7 +9,8 @@
     }
   },
   "siteVersion": {
-    "visualsonline": "1.0.1"
+    "visualsonline": "1.0.1",
+    "sbir": "1.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
