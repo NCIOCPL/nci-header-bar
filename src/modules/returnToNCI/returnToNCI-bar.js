@@ -330,7 +330,8 @@ var merge = function() {
                     "#maincontent",
                     ".genSiteSkipToContent",
                     ".hideLink",
-                    "[href='#Content']"
+                    "[href='#Content']",
+                    "#DeaStdSkipToMainContentLink"
                 ];
                 //check if any of the skip links are the first child of body - if not then move it before inserting the iframe
                 // var firstChild = document.querySelectorAll("body > :first-child");
