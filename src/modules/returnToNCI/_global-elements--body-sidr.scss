@@ -1,5 +1,5 @@
 /* body styles needed for Return To NCI bar */
-body {
+body:not(.toolbar) {
 	display: inline-block;
 	width: 100%;
 }
