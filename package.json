@@ -5,10 +5,12 @@
   "main": "nci-global.js",
   "modules": {
     "returnToNCI": {
-      "version": "1.0.4"
+      "version": "1.0.5"
     }
   },
   "siteVersion": {
+    "nci-global": "1.0.0",
+    "nci-global--fixed-positioning": "1.0.0",
     "visualsonline": "1.0.2"
   },
   "scripts": {

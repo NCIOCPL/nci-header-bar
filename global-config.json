@@ -27,7 +27,8 @@
             "globalCSS": "nci-global--ccr"
         },
         "cpfp": {
-            "url": "cpfp.cancer.gov"
+            "url": "cpfp.cancer.gov",
+            "globalCSS": "nci-global--fixed-positioning"
         },
         "cssi": {
             "url": "cssi.cancer.gov",
@@ -104,6 +105,10 @@
             "url": "ncl.cancer.gov",
             "globalCSS": "nci-global--sidr"
         },
+        "ncorp": {
+            "url": "ncorp.cancer.gov",
+            "globalCSS": "nci-global--fixed-positioning"
+        },
         "next": {
             "url": "next.cancer.gov"
         },
@@ -117,7 +122,8 @@
             "globalCSS": "nci-global--ocg"
         },
         "prevention": {
-            "url": "prevention.cancer.gov"
+            "url": "prevention.cancer.gov",
+            "globalCSS": "nci-global--fixed-positioning"
         },
         "proteomics": {
             "url": "proteomics.cancer.gov",
