@@ -96,7 +96,8 @@ var merge = function() {
         var defaults = {
             hasModalPopup: false,
             hasSIDR: false,
-            hasFixedHeader: false,
+            hasFixedHeader: false, //depricated in favor of hasFixedElements
+            hasFixedElements: false,
             returnToNci_cssPath: '//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css'
             // local CSS path for dev testing: returnToNci_cssPath: '/modules/returnToNCI/returnToNCI-bar.css'
         };
@@ -294,17 +295,12 @@ var merge = function() {
         // initialize the NCI Top Bar iFrame
         function init() {
 
-            // kick out of init if body has .toolbar class - indicates Drupal admin mode
-            if(document.body.classList.contains('toolbar')){
-                return false
-            }
-
             var checkTransform = function(){
                 // sidr applies transforms to the <body> element
                 // fancybox uses fixed elements for the lightbox feature.
                 // fixed elements of a transformed parent become relative to the parent instead of the viewport
                 //var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
-                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || settings.hasModalPopup || settings.hasSIDR || settings.hasFixedHeader
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || settings.hasModalPopup || settings.hasSIDR || settings.hasFixedHeader || settings.hasFixedElements
             };
 
             var checkFixed = function(){
@@ -426,6 +422,10 @@ var merge = function() {
             // this is basically document.ready
             var injectIframe = function(){
                 if(document.contains(document.body)){
+                    // kick out of init if body has .toolbar class - indicates Drupal admin mode
+                    if(document.body.classList.contains('toolbar')){
+                        return false
+                    }
                     // this will work even if window.Linkback is undefined
                     settings = merge(defaults,window.Linkback);
                     // assign variable shortcuts
