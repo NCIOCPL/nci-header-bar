@@ -98,6 +98,8 @@ var merge = function() {
             hasSIDR: false,
             hasFixedHeader: false, //depricated in favor of hasFixedElements
             hasFixedElements: false,
+            uxWindow: false,
+            sameUxWindow: false,
             returnToNci_cssPath: '//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css'
             // local CSS path for dev testing: returnToNci_cssPath: '/modules/returnToNCI/returnToNCI-bar.css'
         };
@@ -255,15 +257,24 @@ var merge = function() {
             // var barStyles = '<link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" />';
 
 
+            var target = "_parent";
+
+            if (settings.uxWindow !== false) {
+                target = "_blank";
+            }
+            if (settings.sameUxWindow !== false) {
+                target = "linkbacknewwindow";
+            }
+            
             var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />'+ barStyles +'</head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
-                '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_" tabindex="-1">About Cancer</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_" tabindex="-1">Cancer Types</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/research?cid=cgov_research_" tabindex="-1">Research</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_" tabindex="-1">Grants &amp; Training</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_" tabindex="-1">News &amp; Events</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_" tabindex="-1">About NCI</a></li>' +
-                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_" tabindex="-1">About Cancer</a></li>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/types?cid=cgov_cancertypes_" tabindex="-1">Cancer Types</a></li>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/research?cid=cgov_research_" tabindex="-1">Research</a></li>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_" tabindex="-1">Grants &amp; Training</a></li>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_" tabindex="-1">News &amp; Events</a></li>' +
+                '<li><a target="' + target + '" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_" tabindex="-1">About NCI</a></li>' +
+                '</ul></div><div id="returnToNCI-drawer"><a target="' + target + '" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
                 '</body>';
 
             // inject meta tag to force compatibility mode to edge in IE
@@ -300,7 +311,7 @@ var merge = function() {
                 // fancybox uses fixed elements for the lightbox feature.
                 // fixed elements of a transformed parent become relative to the parent instead of the viewport
                 //var sitename = document.querySelectorAll('script[src*=sitename]')[0].src.split("sitename=")[1];
-                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || settings.hasModalPopup || settings.hasSIDR || settings.hasFixedHeader || settings.hasFixedElements
+                return !!(document.getElementById('sidr-close') || document.head.innerHTML.match(/sidr/g) !== null) || settings.hasModalPopup || settings.hasSIDR || settings.hasFixedHeader || settings.hasFixedElements || settings.uxWindow || settings.sameUxWindow
             };
 
             var checkFixed = function(){
