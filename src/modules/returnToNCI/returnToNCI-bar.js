@@ -98,6 +98,7 @@ var merge = function() {
             hasSIDR: false,
             hasFixedHeader: false, //depricated in favor of hasFixedElements
             hasFixedElements: false,
+            uxWindow: false,
             returnToNci_cssPath: '//static.cancer.gov/nci-globals/modules/returnToNCI/returnToNCI-bar-v1.0.0.min.css'
             // local CSS path for dev testing: returnToNci_cssPath: '/modules/returnToNCI/returnToNCI-bar.css'
         };
@@ -254,16 +255,17 @@ var merge = function() {
             // DEV styles
             // var barStyles = '<link rel="stylesheet" href="/modules/returnToNCI/returnToNCI-bar.css" />';
 
-
+            var linktarget = settings.uxWindow === false ? '_parent' : settings.uxWindow;
+            
             var content = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />'+ barStyles +'</head>' +
                 '<body><nav id="returnToNCI-nav" style="display:none"><div id="returnToNCI-menu"><ul>'+
-                '<li><a target="_parent" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_" tabindex="-1">About Cancer</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/types?cid=cgov_cancertypes_" tabindex="-1">Cancer Types</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/research?cid=cgov_research_" tabindex="-1">Research</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_" tabindex="-1">Grants &amp; Training</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_" tabindex="-1">News &amp; Events</a></li>' +
-                '<li><a target="_parent" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_" tabindex="-1">About NCI</a></li>' +
-                '</ul></div><div id="returnToNCI-drawer"><a target="_parent" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/about-cancer?cid=cgovnav_aboutcancer_" tabindex="-1">About Cancer</a></li>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/types?cid=cgov_cancertypes_" tabindex="-1">Cancer Types</a></li>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/research?cid=cgov_research_" tabindex="-1">Research</a></li>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/grants-training?cid=cgov_grantstraining_" tabindex="-1">Grants &amp; Training</a></li>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/news-events?cid=cgov_newsandevents_" tabindex="-1">News &amp; Events</a></li>' +
+                '<li><a target="' + linktarget + '" href="https://www.cancer.gov/about-nci?cid=cgov_aboutnci_" tabindex="-1">About NCI</a></li>' +
+                '</ul></div><div id="returnToNCI-drawer"><a target="' + linktarget + '" tabindex="1" id="returnToNCI-link--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a><a class="chevron" href="#" aria-label="Open Drawer" tabindex="2"></a></div></nav>' +
                 '</body>';
 
             // inject meta tag to force compatibility mode to edge in IE
