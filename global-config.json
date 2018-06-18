@@ -146,7 +146,8 @@
         },
         "supportorgs": {
             "url": "supportorgs.cancer.gov",
-            "startPage": "home.aspx?js=1"
+            "startPage": "home.aspx?js=1",
+            "globalCSS": "nci-global--supportorgs"
         },
         "techtransfer": {
             "url": "techtransfer.cancer.gov"
