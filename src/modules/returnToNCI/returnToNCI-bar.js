@@ -425,7 +425,7 @@ var merge = function() {
             var injectIframe = function(){
                 if(document.contains(document.body)){
                     // kick out of init if body has .toolbar class - indicates Drupal admin mode
-                    if(document.body.classList.contains('toolbar')){
+                    if(document.body.className.match(/toolbar/gi)){
                         return false
                     }
                     // this will work even if window.Linkback is undefined
