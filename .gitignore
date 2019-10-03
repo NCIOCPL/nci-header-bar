@@ -59,3 +59,6 @@ typings/
 
 # The build folder where everything goes.
 dist
+
+.DS_Store
+package-lock.json
