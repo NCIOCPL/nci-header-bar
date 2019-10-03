@@ -1,4 +1,5 @@
 (function createLinkbackBar() {
+    var site = window.location.hostname;
     var linkback = create('iframe', {
         id: 'returnToNCIframe',
         title: 'Link to cancer.gov',
@@ -14,11 +15,11 @@
         'body {margin: 0; background: #1c5e86;}' +
         'a {color: white; text-transform: uppercase; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}' +
         'a:hover {text-decoration: underline;}' +
-        '#returnToNCInav {height: 100%; display:block; line-height: 48px; text-align: center;}' +
+        '#returnToNCInav {height: 100%; display:block; line-height: 25px; text-align: center;}' +
         '</style>' +
         '<body>' +
         '<nav id="returnToNCInav">' +
-        '<a target="' + linktarget + '" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_closed_">National Cancer Institute - Cancer.gov</a>' +
+        '<a target="' + linktarget + '" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_' + site + '">National Cancer Institute - Cancer.gov</a>' +
         '</nav>' +
         '</body>';
 
@@ -42,6 +43,7 @@
             ".skipNavigation",
             "#skipNav",
             ".skip_nav",
+            ".skipnav",
             ".hiddenStructure",
             "#maincontent",
             ".genSiteSkipToContent",
