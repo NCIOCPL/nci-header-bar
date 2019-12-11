@@ -5,21 +5,20 @@
         title: 'Link to cancer.gov',
         width: '100%',
         height: '24px',
-        scrolling: 'no',
-        style: 'border: 0; display: block;'
+        scrolling: 'no'
     });
     var linktarget = "_new";
     var content = '<head>' +
         '<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />' +
         '<style>' +
-        'body {margin: 0; background: #1c5e86;}' +
-        'a {color: white; text-transform: uppercase; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}' +
+        'body {margin: 0; background: #F1F1F1; border-bottom: 1px #999999 solid;}' +
+        'a {color: #333333; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}' +
         'a:hover {text-decoration: underline;}' +
         '#returnToNCInav {height: 100%; display:block; line-height: 25px; text-align: center;}' +
         '</style>' +
         '<body>' +
         '<nav id="returnToNCInav">' +
-        '<a target="' + linktarget + '" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_' + site + '">National Cancer Institute - Cancer.gov</a>' +
+        '<a target="' + linktarget + '" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_' + site + '">National Cancer Institute Homepage</a>' +
         '</nav>' +
         '</body>';
 
@@ -89,10 +88,20 @@
    
     // set shortcut variable
     iframeDoc = linkback.contentWindow.document;
+    
 
     //inject top bar markup
     iframeDoc.open();
     iframeDoc.write(content);
+    linkbackIframe = document.getElementById("returnToNCIframe");
+    // setting styles wasn't working for IE11 in the iframe block, had to inject here
+    linkbackIframe.style.border = 'none';
+    linkbackIframe.style.display = 'block';
+    linkbackIframe.style.position = 'absolute';
+    linkbackIframe.style.left = '0';
+    linkbackIframe.style.right = '0';
+    linkbackIframe.style.top = '0';
+    document.body.style.marginTop = '24px';
     iframeDoc.close();
 
     // create new DOM nodes
