@@ -7,20 +7,16 @@
         height: '24px',
         scrolling: 'no'
     });
-    var linktarget = "_new";
-    var content = '<head>' +
-        '<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" />' +
-        '<style>' +
-        'body {margin: 0; background: #F1F1F1; border-bottom: 1px #999999 solid;}' +
-        'a {color: #333333; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}' +
-        'a:hover {text-decoration: underline;}' +
-        '#returnToNCInav {height: 100%; display:block; line-height: 25px; text-align: center;}' +
-        '</style>' +
-        '<body>' +
-        '<nav id="returnToNCInav">' +
-        '<a target="' + linktarget + '" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_' + site + '">National Cancer Institute Homepage</a>' +
-        '</nav>' +
-        '</body>';
+    function writeText() {
+        var finalText;
+        var language = document.documentElement.lang;
+        if (language === 'es') {
+            finalText = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><style>body {margin: 0; background: #F1F1F1; border-bottom: 1px #999999 solid;}a {color: #333333; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}a:hover {text-decoration: underline;}#returnToNCInav {height: 100%; display:block; line-height: 25px; text-align: center;}</style><body><nav id="returnToNCInav"><a target="_new" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov/espanol?cid=cgovnav_hp_esp_' + site + '">Página principal del Instituto Nacional del Cáncer</a></nav></body>';
+        } else {
+            finalText = '<head><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans" /><style>body {margin: 0; background: #F1F1F1; border-bottom: 1px #999999 solid;}a {color: #333333; text-decoration: none; font-size: 10px; font-family: "Noto Sans", Arial, sans-serif}a:hover {text-decoration: underline;}#returnToNCInav {height: 100%; display:block; line-height: 25px; text-align: center;}</style><body><nav id="returnToNCInav"><a target="_new" tabindex="1" id="returnToNCIlink--home" href="https://www.cancer.gov?cid=cgovnav_hp_' + site + '">National Cancer Institute - Cancer.gov</a></nav></body>';
+        }
+        return finalText;
+    }
 
     //  take a DOM node and returns an index
     function getNodeIndex( elm ){
@@ -85,14 +81,14 @@
     } else {
         document.body.insertBefore(linkback,document.body.firstChild);
     }
-   
+
     // set shortcut variable
     iframeDoc = linkback.contentWindow.document;
     
 
     //inject top bar markup
     iframeDoc.open();
-    iframeDoc.write(content);
+    iframeDoc.write(writeText());
     linkbackIframe = document.getElementById("returnToNCIframe");
     // setting styles wasn't working for IE11 in the iframe block, had to inject here
     linkbackIframe.style.border = 'none';
